@@ -207,8 +207,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .intro-ground { fill: var(--white); stroke: var(--fog); stroke-width: 1; }
 .intro-glow { fill: none; stroke: var(--corner-sky); stroke-width: 14; stroke-opacity: .6; }
 .intro-line { fill: none; stroke: var(--reach-blue); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
-.intro-student { fill: var(--corner-sky); stroke: var(--reach-blue); stroke-width: 3; }
-.intro-lab { fill: var(--reach-blue); fill-opacity: .45; stroke: var(--reach-blue); stroke-width: 3; }
 
 .ribbon-pill rect { fill: var(--white); stroke: var(--fog); stroke-width: 1; }
 
@@ -216,7 +214,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .hero { padding-top: 48px; }
   .display { font-size: 44px; line-height: 48px; }
   .ribbon { margin-top: 32px; }
-  .ribbon-art { height: 300px; }
+  .ribbon-art { height: 380px; }
 }
 
 /* How it works */
@@ -306,12 +304,8 @@ section { scroll-margin-top: var(--header-space); }
 
 .match-glow { fill: none; stroke: var(--corner-sky); stroke-width: 16; stroke-opacity: .6; }
 .match-line { fill: none; stroke: var(--reach-blue); stroke-width: 4.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
-.item rect { fill: var(--reach-blue); fill-opacity: .45; stroke: var(--reach-blue); stroke-width: 0; }
-.item.chosen rect { stroke-width: 2; }
-.card-ground { fill: var(--white); }
-.card-line { fill: var(--ink-navy); }
-.center-outline { fill: var(--white); stroke: var(--fog); stroke-width: 2; }
-.center-fill { fill: var(--corner-sky); stroke: var(--reach-blue); stroke-width: 3; }
+.tile { fill: var(--white); stroke: var(--fog); stroke-width: 1.5; }
+.item.fit.is-fit .tile { stroke: var(--reach-blue); stroke-width: 3; }
 .spark-glow { fill: var(--corner-sky); fill-opacity: .55; }
 .spark-core { fill: var(--white); stroke: var(--reach-blue); stroke-width: 3; }
 
