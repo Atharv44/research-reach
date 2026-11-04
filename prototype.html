@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Reach | Prototype</title>
+<meta name="description" content="Work in progress for the next version of the Research Reach site.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="assets/rr-icon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/rr-icon-32.png" sizes="32x32" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400;0,700;1,400&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400;0,700;1,400&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap"></noscript>
+<link rel="stylesheet" href="prototype.css">
+<script>
+  var d = document.documentElement;
+  d.classList.add('js');
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
+</script>
+<script src="assets/gsap.min.js" defer></script>
+<script src="assets/ScrollTrigger.min.js" defer></script>
+<script src="prototype.js" defer></script>
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="glow" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="glow-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
+  </defs>
+</svg>
+
+<header class="site-header">
+  <div class="pill-bar">
+    <a class="brand" href="index.html"><img src="assets/rr-logo-primary.svg" width="132" height="43" alt="Research Reach"></a>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="index.html#students">For students</a></li>
+        <li><a href="labs.html">For labs</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <a class="button button-primary header-cta" data-link="student" href="https://forms.gle/aK2CJZSYnAAkVHnM9" target="_blank" rel="noopener">Get matched</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <h1 class="display" id="hero-title" aria-label="Matching students with research opportunities"><span class="word" aria-hidden="true"><span style="--i:0">Matching</span></span> <span class="word" aria-hidden="true"><span style="--i:1">students</span></span> <span class="word" aria-hidden="true"><span style="--i:2">with</span></span> <em class="accent"><span class="word" aria-hidden="true"><span style="--i:3">research</span></span> <span class="word" aria-hidden="true"><span style="--i:4">opportunities</span></span></em></h1>
+      <p class="hero-lead">Students fill out one profile. Faculty tell us what they look for. We introduce the students who fit.</p>
+      <div class="hero-actions">
+        <a class="button button-primary" data-link="student" href="https://forms.gle/aK2CJZSYnAAkVHnM9" target="_blank" rel="noopener">I’m a student</a>
+        <a class="button button-outline" href="labs.html">I run a lab</a>
+      </div>
+    </div>
+
+    <div class="ribbon" role="img" aria-label="Cold emails stream into Research Reach and come out as one introduction between a student and a lab">
+      <svg class="ribbon-art" viewBox="0 0 1440 320" aria-hidden="true" focusable="false">
+        <path class="ribbon-band" d="M-60 96C173 -16 396 336 686 160"/>
+        <path class="ribbon-track" id="ribbon-track" d="M-60 96C173 -16 396 336 686 160"/>
+        <text class="ribbon-text"><textPath href="#ribbon-track" startOffset="-200">Dear Professor     I am a sophomore interested in your research     I know you are very busy     I have attached my resume     I would love to learn more about your lab     I am happy to volunteer     Following up on my last email     Dear Professor     I am a freshman interested in your work     Please let me know if there are any openings     </textPath></text>
+        <g class="ribbon-out">
+          <path class="ribbon-lead" d="M752 160H790"/>
+          <g class="intro-card" transform="translate(790 100)">
+            <rect class="intro-ground" width="300" height="120" rx="8"/>
+            <path class="intro-glow" d="M76 60C118 104 182 104 222 60" filter="url(#glow)"/>
+            <path class="intro-line" d="M76 60C118 104 182 104 222 60" pathLength="1"/>
+            <circle class="intro-student" cx="56" cy="60" r="20"/>
+            <rect class="intro-lab" x="222" y="42" width="36" height="36" rx="3"/>
+          </g>
+        </g>
+        <g class="ribbon-pill" transform="translate(720 160)">
+          <rect x="-40" y="-24" width="80" height="48" rx="24"/>
+          <image href="assets/rr-icon.svg" x="-14" y="-14" width="28" height="28"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <section class="how" id="how" aria-labelledby="how-title">
+    <div class="how-inner">
+      <h2 class="how-title" id="how-title">How it <em class="accent">works</em></h2>
+      <div class="steps">
+        <div class="rail-wrap">
+          <ol class="rail" role="tablist" aria-label="Steps">
+            <li role="presentation"><button class="rail-step" type="button" role="tab" id="tab-1" aria-selected="true" aria-controls="stage" tabindex="0"><span class="rail-num" aria-hidden="true">1</span><span class="rail-label">Fill out one profile</span></button></li>
+            <li role="presentation"><button class="rail-step" type="button" role="tab" id="tab-2" aria-selected="false" aria-controls="stage" tabindex="-1"><span class="rail-num" aria-hidden="true">2</span><span class="rail-label">We screen for fit</span></button></li>
+            <li role="presentation"><button class="rail-step" type="button" role="tab" id="tab-3" aria-selected="false" aria-controls="stage" tabindex="-1"><span class="rail-num" aria-hidden="true">3</span><span class="rail-label">Meet your lab</span></button></li>
+          </ol>
+          <span class="rail-track" aria-hidden="true"><span class="rail-fill"></span></span>
+        </div>
+
+        <div class="stage" id="stage" role="tabpanel" aria-labelledby="tab-1">
+          <svg class="scene" viewBox="0 0 640 400" aria-hidden="true" focusable="false">
+            <g class="match">
+              <path class="match-glow" d="M180 200C255 290 395 290 469 200" filter="url(#glow)"/>
+              <path class="match-line" id="stage-track" d="M180 200C255 290 395 290 469 200" pathLength="1"/>
+            </g>
+            <g class="field">
+              <g class="item" data-x="72" data-y="84" transform="translate(72 84)" opacity="0"><rect x="-14" y="-14" width="28" height="28" rx="3"/></g>
+              <g class="item fit" data-x="300" data-y="62" transform="translate(300 62)" opacity="0"><rect x="-14" y="-14" width="28" height="28" rx="3"/></g>
+              <g class="item fit chosen" data-x="470" data-y="118" transform="translate(490 200) scale(1.4)"><rect x="-14" y="-14" width="28" height="28" rx="3"/></g>
+              <g class="item" data-x="566" data-y="72" transform="translate(566 72)" opacity="0"><rect x="-14" y="-14" width="28" height="28" rx="3"/></g>
+              <g class="item" data-x="540" data-y="268" transform="translate(540 268)" opacity="0"><rect x="-14" y="-14" width="28" height="28" rx="3"/></g>
+              <g class="item fit" data-x="342" data-y="320" transform="translate(342 320)" opacity="0"><rect x="-14" y="-14" width="28" height="28" rx="3"/></g>
+              <g class="item" data-x="104" data-y="318" transform="translate(104 318)" opacity="0"><rect x="-14" y="-14" width="28" height="28" rx="3"/></g>
+            </g>
+            <g class="card" transform="translate(226 158)" opacity="0">
+              <rect class="card-ground" width="150" height="84" rx="8"/>
+              <rect class="card-line" x="20" y="22" width="88" height="6" rx="3"/>
+              <rect class="card-line" x="20" y="39" width="110" height="6" rx="3"/>
+              <rect class="card-line" x="20" y="56" width="64" height="6" rx="3"/>
+            </g>
+            <g class="center" transform="translate(150 200)">
+              <circle class="center-outline" r="30"/>
+              <circle class="center-fill" r="30"/>
+            </g>
+            <g class="spark" opacity="0"><circle r="10" class="spark-glow" filter="url(#glow)"/><circle r="5" class="spark-core"/></g>
+          </svg>
+          <p class="visually-hidden" id="stage-status" aria-live="polite"></p>
+        </div>
+
+        <div class="step-copy">
+          <div class="step-text" data-step="1"><h3>Fill out one profile</h3><p>Five minutes, with your IU email</p></div>
+          <div class="step-text" data-step="2"><h3>We screen for fit</h3><p>We check you against what each lab looks for</p></div>
+          <div class="step-text" data-step="3"><h3>Meet your lab</h3><p>We introduce you to a professor whose lab fits</p></div>
+        </div>
+
+        <div class="step-controls">
+          <button class="text-button" type="button" data-move="back">Back</button>
+          <button class="text-button" type="button" data-move="next">Next</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="after" aria-labelledby="after-title">
+    <div class="after-inner">
+      <h2 id="after-title">The rest of the page comes next</h2>
+      <p>This prototype covers the header, the hero and How it works. The problem block, both lanes, the closing panel and the footer follow once these two feel right.</p>
+      <a class="button button-outline" href="index.html">Back to the live site</a>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
