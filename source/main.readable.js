@@ -79,102 +79,101 @@ var COHORT_LINE = '';
     });
   };
 
-  /* The ribbon */
-  var ribbon = $('.ribbon');
-  if (ribbon) (function () {
-    var art = $('.ribbon-art', ribbon);
-    var band = $('.ribbon-band', art), track = $('.ribbon-track', art), textPath = $('textPath', art);
-    var pill = $('.ribbon-pill', art), lead = $('.ribbon-lead', art), card = $('.intro-card', art);
-    var phrase = textPath.textContent;
-    textPath.textContent = phrase + phrase + phrase;
+  /* The hero: two profiles go in, one introduction comes out */
+  var intro = $('.intro-scene');
+  if (intro) (function () {
+    var stu = $('.i-student', intro), prof = $('.i-prof', intro);
+    var trailS = $('.trail-s', intro), trailP = $('.trail-p', intro);
+    var flyS = $('.fly-s', intro), flyP = $('.fly-p', intro);
+    var pill = $('.i-pill', intro), pulse = $('.i-pill-pulse', intro);
+    var card = $('.i-card', intro), cardScale = $('.i-card-scale', intro);
+    var backs = $$('.i-back', intro), front = $('.i-front', intro), tiles = $$('.i-tile', intro);
+    var line = $('.i-line', intro), glow = $('.i-glow', intro), bars = $$('.i-bar', intro);
+    var loop = null, shown = false;
 
-    var measure = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    measure.setAttribute('class', 'ribbon-text');
-    measure.setAttribute('visibility', 'hidden');
-    measure.textContent = phrase;
-    art.appendChild(measure);
-
-    var repeatLen = 2400, flow = { offset: 0 }, flowTween = null, speed = { now: 1, target: 1 };
-
+    // Two compositions: wide for tablets and up, tall for phones
     var layout = function () {
-      var w = Math.round(art.getBoundingClientRect().width) || 1440;
-      var h = Math.round(art.getBoundingClientRect().height) || 320;
-      art.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
-      var narrow = w < 768;
-      var px = narrow ? w - 64 : Math.round(w * 0.46), py = narrow ? 76 : h * 0.5;
-      var d = narrow
-        ? 'M-60 ' + (py - 50) + 'C' + (w * 0.3) + ' ' + (py - 110) + ' ' + (w * 0.4) + ' ' + (py + 90) + ' ' + (px - 44) + ' ' + py
-        : 'M-60 ' + (h * 0.28) + 'C' + (w * 0.16) + ' ' + (h * -0.08) + ' ' + (px * 0.6) + ' ' + (h * 1.06) + ' ' + (px - 44) + ' ' + py;
-      band.setAttribute('d', d);
-      track.setAttribute('d', d);
-      pill.setAttribute('transform', 'translate(' + px + ' ' + py + ')');
-      var cw, cx, cy;
-      if (narrow) {
-        cw = Math.min(320, w - 32); cx = (w - cw) / 2; cy = h - 208;
-        lead.setAttribute('d', 'M' + px + ' ' + (py + 24) + 'V' + (cy - 8));
-      } else {
-        var margin = w >= 1024 ? 64 : 32;
-        cw = Math.max(300, Math.min(440, w - px - 70 - margin)); cx = px + 70; cy = py - 100;
-        lead.setAttribute('d', 'M' + (px + 40) + ' ' + py + 'H' + (px + 70));
-      }
-      card.setAttribute('transform', 'translate(' + cx + ' ' + cy + ')');
-      $('.intro-ground', card).setAttribute('width', cw);
-      var fs = 0.24, feet = 190, stx = Math.round(cw * 0.22), prx = Math.round(cw * 0.78);
-      $('.intro-student', card).setAttribute('transform', 'translate(' + stx + ' ' + feet + ') scale(' + fs + ')');
-      $('.intro-prof', card).setAttribute('transform', 'translate(' + prx + ' ' + feet + ') scale(' + fs + ')');
-      var hx1 = stx + 210 * fs, hx2 = prx - 210 * fs, hy = feet - 440 * fs, dip = hy + 44;
-      var q = 'M' + hx1 + ' ' + hy + 'C' + (hx1 + (hx2 - hx1) * 0.3) + ' ' + dip + ' ' + (hx2 - (hx2 - hx1) * 0.3) + ' ' + dip + ' ' + hx2 + ' ' + hy;
-      $('.intro-line', card).setAttribute('d', q);
-      $('.intro-glow', card).setAttribute('d', q);
-      repeatLen = measure.getComputedTextLength() || repeatLen;
+      var narrow = intro.getBoundingClientRect().width < 600;
+      var L = narrow
+        ? { w: 360, h: 430, s: 0.34, sx: 66, px: 294, feet: 424, cx: 180, py: 262, cy: 118, k: 0.58 }
+        : { w: 1200, h: 420, s: 0.5, sx: 220, px: 980, feet: 400, cx: 600, py: 96, cy: 244, k: 1 };
+      intro.setAttribute('viewBox', '0 0 ' + L.w + ' ' + L.h);
+      stu.setAttribute('transform', 'translate(' + L.sx + ' ' + L.feet + ')');
+      prof.setAttribute('transform', 'translate(' + L.px + ' ' + L.feet + ')');
+      $$('.i-scale', intro).forEach(function (g) { g.setAttribute('transform', 'scale(' + L.s + ')'); });
+      pill.setAttribute('transform', 'translate(' + L.cx + ' ' + L.py + ')');
+      card.setAttribute('transform', 'translate(' + L.cx + ' ' + L.cy + ')');
+      cardScale.setAttribute('transform', 'scale(' + L.k + ')');
+      var hy = L.feet - 306 * L.s, top = L.py - 30 * L.k, edge = 46 * L.k;
+      var arc = function (x, dir) {
+        var x0 = x + dir * 70 * L.s, x1 = L.cx - dir * edge;
+        return 'M' + x0 + ' ' + (hy - 20 * L.s) + 'C' + (x0 + (x1 - x0) * 0.25) + ' ' + (top - 30 * L.k) + ' ' + (x0 + (x1 - x0) * 0.6) + ' ' + (top - 26 * L.k) + ' ' + x1 + ' ' + L.py;
+      };
+      trailS.setAttribute('d', arc(L.sx, 1));
+      trailP.setAttribute('d', arc(L.px, -1));
+      L.hy = hy;
+      return L;
     };
 
-    var startFlow = function () {
-      if (flowTween) flowTween.kill();
-      flow.offset = -repeatLen;
-      flowTween = gsap.to(flow, {
-        offset: 0, duration: repeatLen / 42, ease: 'none', repeat: -1,
-        onUpdate: function () { textPath.setAttribute('startOffset', flow.offset.toFixed(1)); }
-      });
+    var place = function (el, path, t, sc) {
+      var pt = path.getPointAtLength(path.getTotalLength() * t);
+      el.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1) + ') scale(' + sc.toFixed(3) + ')');
     };
 
-    var cardLoop = gsap.timeline({ repeat: -1, paused: true, defaults: { ease: 'power2.inOut' } })
-      .set('.intro-line', { strokeDashoffset: 1 })
-      .set('.intro-glow', { opacity: 0 })
-      .to('.intro-line', { strokeDashoffset: 0, duration: 0.7 }, 0.4)
-      .to('.intro-glow', { opacity: 1, duration: 0.4 }, 1.1)
-      .to(['.intro-line', '.intro-glow'], { opacity: 0, duration: 0.4 }, 4.2)
-      .set('.intro-line', { opacity: 1, strokeDashoffset: 1 }, 4.6);
-
-    var ready = function () {
-      layout();
-      if (!motion) { textPath.setAttribute('startOffset', String(-repeatLen * 0.4)); return; }
-      startFlow();
-      gsap.ticker.add(function () {
-        speed.now += (speed.target - speed.now) * 0.08;
-        speed.target += (1 - speed.target) * 0.05;
-        if (flowTween) flowTween.timeScale(speed.now);
-      });
+    var build = function () {
+      var L = layout();
+      if (loop) loop.kill();
+      if (!motion) return;
+      var f = { t: 0, o: 0 };
+      var draw = function () {
+        var sc = (1 - f.t * 0.55) * L.s / 0.5;
+        place(flyS, trailS, f.t, sc); place(flyP, trailP, f.t, sc);
+        flyS.setAttribute('opacity', f.o.toFixed(2)); flyP.setAttribute('opacity', f.o.toFixed(2));
+      };
+      gsap.set(backs, { y: -(L.cy - L.py) / L.k, scale: 0.3, opacity: 0, transformOrigin: '50% 50%' });
+      gsap.set(front, { scale: 0.85, opacity: 0, transformOrigin: '50% 50%' });
+      gsap.set(tiles, { scale: 0.6, opacity: 0, transformOrigin: '50% 50%' });
+      gsap.set(line, { strokeDashoffset: 1 });
+      gsap.set(glow, { opacity: 0 });
+      gsap.set(bars, { scaleX: 0, transformOrigin: '0% 50%' });
+      loop = gsap.timeline({ repeat: -1, paused: true, onUpdate: draw })
+        .fromTo(f, { t: 0, o: 0 }, { o: 1, duration: 0.2 }, 0.2)
+        .to(f, { t: 1, duration: 1.1, ease: 'power1.inOut' }, 0.2)
+        .to(f, { o: 0, duration: 0.15 }, 1.2)
+        .fromTo([trailS, trailP], { strokeDashoffset: 0 }, { strokeDashoffset: -48, duration: 1.3, ease: 'none' }, 0.1)
+        .to(pulse, { scale: 1.12, transformOrigin: '50% 50%', duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out' }, 1.2)
+        .to(backs, { y: 0, scale: 1, opacity: 1, duration: 0.55, ease: 'expo.out', stagger: 0.08 }, 1.45)
+        .to(front, { scale: 1, opacity: 1, duration: 0.45, ease: 'expo.out' }, 1.75)
+        .to(tiles, { scale: 1, opacity: 1, duration: 0.35, ease: 'expo.out', stagger: 0.1 }, 2.0)
+        .to(line, { strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut' }, 2.3)
+        .to(glow, { opacity: 1, duration: 0.2 }, 2.9)
+        .to(bars, { scaleX: 1, duration: 0.5, ease: 'expo.out', stagger: 0.1 }, 2.9)
+        .to(cardScale.parentNode, { opacity: 0, duration: 0.45, ease: 'power2.in' }, 6.2)
+        .set(backs, { y: -(L.cy - L.py) / L.k, scale: 0.3, opacity: 0 }, 6.7)
+        .set(front, { scale: 0.85, opacity: 0 }, 6.7)
+        .set(tiles, { scale: 0.6, opacity: 0 }, 6.7)
+        .set(line, { strokeDashoffset: 1 }, 6.7)
+        .set(glow, { opacity: 0 }, 6.7)
+        .set(bars, { scaleX: 0 }, 6.7)
+        .set(cardScale.parentNode, { opacity: 1 }, 6.75)
+        .to({}, { duration: 0.25 }, 6.75);
+      if (!shown) {
+        shown = true;
+        gsap.from([stu, prof], { y: '+=36', opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.12, delay: 0.3 });
+        gsap.delayedCall(0.9, function () { loop.play(); });
+      } else loop.play();
       ScrollTrigger.create({
-        trigger: ribbon, start: 'top bottom', end: 'bottom top',
-        onToggle: function (self) {
-          if (self.isActive) { flowTween && flowTween.resume(); cardLoop.play(); }
-          else { flowTween && flowTween.pause(); cardLoop.pause(); }
-        },
-        onUpdate: function (self) {
-          speed.target = Math.max(speed.target, Math.min(3, 1 + Math.abs(self.getVelocity()) / 900));
-        }
+        trigger: intro, start: 'top bottom', end: 'bottom top',
+        onToggle: function (self) { self.isActive ? loop.resume() : loop.pause(); },
+        onUpdate: function (self) { loop.timeScale(Math.min(2, 1 + Math.abs(self.getVelocity()) / 1500)); }
       });
-      cardLoop.play();
-      gsap.to(pill, { scale: 1.05, transformOrigin: '50% 50%', duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
     };
-
-    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(ready);
-    var rw = 0;
+    build();
+    var iw = intro.getBoundingClientRect().width;
     window.addEventListener('resize', function () {
-      var w = art.getBoundingClientRect().width;
-      if (Math.abs(w - rw) < 2) return;
-      rw = w; layout(); if (motion) startFlow();
+      var w = intro.getBoundingClientRect().width;
+      if ((w < 600) === (iw < 600)) { iw = w; return; }
+      iw = w; build();
     });
   })();
 
@@ -488,11 +487,11 @@ var COHORT_LINE = '';
       gsap.set(rows, { x: -24, opacity: 0 });
       once($('.value-list'), function () { gsap.to(rows, { x: 0, opacity: 1, duration: 0.7, ease: 'expo.out', stagger: 0.12 }); });
     }
-    var lane = $$('.lane-list li');
-    if (lane.length) {
-      gsap.set(lane, { x: 32, opacity: 0 });
-      once($('.lane-list'), function () { gsap.to(lane, { x: 0, opacity: 1, duration: 0.7, ease: 'expo.out', stagger: 0.1 }); });
-    }
+    $$('.lane-list').forEach(function (list) {
+      var lane = $$('li', list);
+      gsap.set(lane, { x: -24, opacity: 0 });
+      once(list, function () { gsap.to(lane, { x: 0, opacity: 1, duration: 0.7, ease: 'expo.out', stagger: 0.1 }); });
+    });
     $$('.reveal').forEach(function (h) {
       if (h.getBoundingClientRect().top < window.innerHeight) return;
       gsap.set(h, { y: 24, opacity: 0 });
