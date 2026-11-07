@@ -81,50 +81,23 @@ var LAB_PROFILE_URL = '';
     });
   };
 
-  /* The hero: a student's profile goes in, an introduction lands with the Professor */
+  /* The hero: the Student and the Professor reach for the Research Reach mark */
   var hero = $('.hero-scene');
   if (hero && motion) (function () {
-    var trail = $('.trail-in', hero), drop = $('.trail-drop', hero), fly = $('.fly', hero), pulse = $('.i-pill-pulse', hero);
-    var card = $('.i-card', hero), backs = $$('.i-back', hero), front = $('.i-front', hero), tiles = $$('.i-tile', hero);
-    var line = $('.i-line', hero), glow = $('.i-glow', hero), bars = $$('.i-bar', hero), figs = $$('.h-fig', hero);
-    var f = { t: 0, o: 0 }, len = trail.getTotalLength();
-    var draw = function () {
-      var pt = trail.getPointAtLength(len * f.t);
-      fly.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1) + ') scale(' + (0.72 - f.t * 0.36).toFixed(3) + ')');
-      fly.setAttribute('opacity', f.o.toFixed(2));
-    };
-    var reset = function () {
-      gsap.set(backs, { y: -120, scale: 0.3, opacity: 0, transformOrigin: '50% 50%' });
-      gsap.set(front, { scale: 0.85, opacity: 0, transformOrigin: '50% 50%' });
-      gsap.set(tiles, { scale: 0.6, opacity: 0, transformOrigin: '50% 50%' });
-      gsap.set(line, { strokeDashoffset: 1 });
-      gsap.set(glow, { opacity: 0 });
-      gsap.set(bars, { scaleX: 0, transformOrigin: '0% 50%' });
-      gsap.set(card, { opacity: 1 });
-    };
-    reset();
-    var loop = gsap.timeline({ repeat: -1, paused: true, onUpdate: draw })
-      .fromTo(f, { t: 0, o: 0 }, { o: 1, duration: 0.2 }, 0.2)
-      .to(f, { t: 1, duration: 1.1, ease: 'power1.inOut' }, 0.2)
-      .to(f, { o: 0, duration: 0.15 }, 1.2)
-      .fromTo([trail, drop], { strokeDashoffset: 0 }, { strokeDashoffset: -48, duration: 1.6, ease: 'none' }, 0.1)
-      .to(pulse, { scale: 1.12, transformOrigin: '50% 50%', duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out' }, 1.2)
-      .to(backs, { y: 0, scale: 1, opacity: 1, duration: 0.55, ease: 'expo.out', stagger: 0.08 }, 1.45)
-      .to(front, { scale: 1, opacity: 1, duration: 0.45, ease: 'expo.out' }, 1.75)
-      .to(tiles, { scale: 1, opacity: 1, duration: 0.35, ease: 'expo.out', stagger: 0.1 }, 2.0)
-      .to(line, { strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut' }, 2.3)
-      .to(glow, { opacity: 1, duration: 0.2 }, 2.9)
-      .to(bars, { scaleX: 1, duration: 0.5, ease: 'expo.out', stagger: 0.1 }, 2.9)
-      .to(card, { opacity: 0, duration: 0.45, ease: 'power2.in' }, 6.2)
-      .add(reset, 6.7)
-      .to({}, { duration: 0.3 }, 6.7);
-    gsap.from(figs, { y: '+=36', opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.12, delay: 0.3 });
-    gsap.delayedCall(0.9, function () { loop.play(); });
-    ScrollTrigger.create({
-      trigger: hero, start: 'top bottom', end: 'bottom top',
-      onToggle: function (self) { self.isActive ? loop.resume() : loop.pause(); },
-      onUpdate: function (self) { loop.timeScale(Math.min(2, 1 + Math.abs(self.getVelocity()) / 1500)); }
-    });
+    var figs = $$('.h-fig', hero), line = $('.m-line', hero), mark = $('.hero-badge', hero);
+    var ring = $('.badge-ring', mark), caption = $('.m-caption', hero), tags = $$('.svg-tag', hero);
+    gsap.set(line, { strokeDashoffset: 1 });
+    gsap.set(mark, { scale: 0.4, opacity: 0, transformOrigin: '50% 50%' });
+    gsap.set([caption].concat(tags), { opacity: 0, y: 8 });
+    gsap.timeline({ delay: 0.3 })
+      .from(figs[0], { x: '-=60', opacity: 0, duration: 0.9, ease: 'expo.out' }, 0)
+      .from(figs[1], { x: '+=60', opacity: 0, duration: 0.9, ease: 'expo.out' }, 0)
+      .to(tags, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, 0.5)
+      .to(mark, { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.6)' }, 0.7)
+      .to(line, { strokeDashoffset: 0, duration: 0.7, ease: 'power2.inOut' }, 0.9)
+      .to(caption, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, 1.4);
+    var pulse = gsap.to(ring, { scale: 1.12, opacity: 0.55, transformOrigin: '50% 50%', duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 2 });
+    idle(hero, [pulse]);
   })();
 
   /* Questions: closed with JavaScript, open without it. Answers fade in 4 px */
@@ -309,9 +282,12 @@ var LAB_PROFILE_URL = '';
       var s = w < 768 ? 0.3 : 0.44, g = Math.min(300, w * 0.3), feet = h - 10;
       var sx = w / 2 - g, px = w / 2 + g;
       $$('.cast-scale', closing).forEach(function (el) { el.setAttribute('transform', 'scale(' + s + ')'); });
-      var hx1 = sx + 210 * s, hx2 = px - 210 * s, hy = feet - 440 * s, dip = hy + (w < 768 ? 40 : 90);
-      var d = 'M' + hx1 + ' ' + hy + 'C' + (hx1 + (hx2 - hx1) * 0.3) + ' ' + dip + ' ' + (hx2 - (hx2 - hx1) * 0.3) + ' ' + dip + ' ' + hx2 + ' ' + hy;
-      line.setAttribute('d', d); glow.setAttribute('d', d);
+      var hx1 = sx + 210 * s, hx2 = px - 210 * s, hy = feet - 440 * s, cx = w / 2, my = hy - 8;
+      var r = w < 768 ? 28 : 40, gap = r + 8;
+      var d = 'M' + hx1 + ' ' + hy + 'C' + (hx1 + 30) + ' ' + (my - 4) + ' ' + (cx - gap - 20) + ' ' + my + ' ' + (cx - gap) + ' ' + my +
+              'M' + hx2 + ' ' + hy + 'C' + (hx2 - 30) + ' ' + (my - 4) + ' ' + (cx + gap + 20) + ' ' + my + ' ' + (cx + gap) + ' ' + my;
+      line.setAttribute('d', d);
+      $('.cast-mark', closing).setAttribute('transform', 'translate(' + cx + ' ' + my + ') scale(' + (r / 40) + ')');
       if (tl) tl.kill();
       if (trig) trig.kill();
       gsap.set(st, { x: sx, y: feet }); gsap.set(pr, { x: px, y: feet });
@@ -320,8 +296,8 @@ var LAB_PROFILE_URL = '';
       tl = gsap.timeline({ paused: true, defaults: { ease: 'power2.out' } })
         .fromTo(st, { x: sx - far, opacity: 0 }, { x: sx, opacity: 1, duration: 1 }, 0)
         .fromTo(pr, { x: px + far, opacity: 0 }, { x: px, opacity: 1, duration: 1 }, 0)
-        .fromTo(line, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.inOut' }, 1)
-        .fromTo(glow, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 1.45);
+        .fromTo(line, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.inOut' }, 1.05)
+        .fromTo(glow, { opacity: 0, scale: 0.4, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.6)' }, 0.85);
       if (window.matchMedia(PIN).matches) {
         trig = ScrollTrigger.create({ trigger: closing.parentNode, start: 'top 90%', end: 'bottom 70%', scrub: 0.8, animation: tl });
       } else {
