@@ -45,7 +45,6 @@ var LAB_PROFILE_URL = '';
   var pins = {};
   var headerSpace = function () { return window.innerWidth < 600 ? 80 : 96; };
   var topOf = function (el) {
-    if (pins[el.id]) return pins[el.id].start;
     return Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - (el.id === 'how' ? 0 : headerSpace())));
   };
   var glide = function (el) {
@@ -86,6 +85,9 @@ var LAB_PROFILE_URL = '';
   if (hero && motion) (function () {
     var figs = $$('.h-fig', hero), line = $('.m-line', hero), mark = $('.hero-badge', hero);
     var ring = $('.badge-ring', mark), caption = $('.m-caption', hero), tags = $$('.svg-tag', hero);
+    var apps = $$('.app', hero), trails = $$('.app-trail', hero);
+    gsap.set(apps, { scale: 0.4, opacity: 0, transformOrigin: '50% 50%' });
+    gsap.set(trails, { opacity: 0 });
     gsap.set(line, { strokeDashoffset: 1 });
     gsap.set(mark, { scale: 0.4, opacity: 0, transformOrigin: '50% 50%' });
     gsap.set([caption].concat(tags), { opacity: 0, y: 8 });
@@ -95,6 +97,8 @@ var LAB_PROFILE_URL = '';
       .to(tags, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, 0.5)
       .to(mark, { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.6)' }, 0.7)
       .to(line, { strokeDashoffset: 0, duration: 0.7, ease: 'power2.inOut' }, 0.9)
+      .to(apps, { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.12 }, 0.45)
+      .to(trails, { opacity: 1, duration: 0.5 }, 0.75)
       .to(caption, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, 1.4);
     var pulse = gsap.to(ring, { scale: 1.12, opacity: 0.55, transformOrigin: '50% 50%', duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 2 });
     idle(hero, [pulse]);
@@ -110,27 +114,25 @@ var LAB_PROFILE_URL = '';
     });
   });
 
-  /* How it works */
+  /* How it works: plays 1, 2, 3 on its own and loops. Pause, or pick a step */
   var how = $('.how');
-  if (how) (function () {
+  if (how && motion) (function () {
     var stage = $('#stage'), scene = $('.scene', stage);
-    var tabs = $$('.rail-step'), texts = $$('.step-text'), fill = $('.rail-fill');
-    var status = $('#stage-status');
-    var back = $('[data-move="back"]'), next = $('[data-move="next"]');
+    var tabs = $$('.rail-step', how), texts = $$('.step-text', how), fill = $('.rail-fill', how);
+    var status = $('#stage-status'), pauseBtn = $('.how-pause', how);
     var items = $$('.item', scene), fits = items.filter(function (i) { return i.classList.contains('fit'); });
     var misses = items.filter(function (i) { return !i.classList.contains('fit'); });
     var chosen = $('.item.chosen', scene), others = items.filter(function (i) { return i !== chosen; });
     var studentG = $('.student', scene), profG = $('.prof', scene), hold = $('.pose-hold', profG), reach = $('.pose-reach', profG);
-    var matchLine = $('.match-line', scene), matchGlow = $('.match-glow', scene), spark = $('.spark', scene);
+    var matchLine = $('.match-line', scene), mark = $('.match-glow', scene);
     var tile = function (el) { return $('.tile', el); };
-
     var told = [
       'Step 1 of 3, Tell us what you look for. The Professor holds a profile of what the lab needs.',
       'Step 2 of 3, We screen every student. Student portraits appear. Four fade out and three that fit are outlined.',
-      'Step 3 of 3, Meet only the students who fit. One Student steps in and a line joins them to the Professor.'
+      'Step 3 of 3, Meet only the students who fit. One Student and the Professor reach toward the Research Reach mark.'
     ];
+    var T = { s1: 0.6, b2: 1.2, s2: 2.3, b3: 2.9, s3: 4.0 };
 
-    var T = { s1: 0.6, b2: 1.2, s2: 2.3, b3: 2.9, s3: 4.0, end: 4.6 };
     gsap.set(profG, { x: 320, y: 410, opacity: 0 });
     gsap.set(hold, { opacity: 1 });
     gsap.set(reach, { opacity: 0 });
@@ -140,8 +142,7 @@ var LAB_PROFILE_URL = '';
       gsap.set(tile(it), { stroke: '#C9D1DC', strokeWidth: 1.5 });
     });
     gsap.set(matchLine, { strokeDashoffset: 1 });
-    gsap.set(matchGlow, { opacity: 0 });
-    gsap.set(spark, { opacity: 0 });
+    gsap.set(mark, { opacity: 0, scale: 0.4, transformOrigin: '50% 50%' });
 
     var tl = gsap.timeline({ paused: true, defaults: { ease: 'power2.inOut' } })
       .to(profG, { y: 382, opacity: 1, duration: 0.55, ease: 'expo.out' }, 0)
@@ -158,73 +159,70 @@ var LAB_PROFILE_URL = '';
       .to(profG, { x: 500, duration: 0.45 }, T.b3 + 0.2)
       .to(hold, { opacity: 0, duration: 0.25 }, T.b3 + 0.35)
       .to(reach, { opacity: 1, duration: 0.25 }, T.b3 + 0.35)
-      .to(matchLine, { strokeDashoffset: 0, duration: 0.5 }, T.b3 + 0.7)
-      .to(matchGlow, { opacity: 1, duration: 0.2 }, T.b3 + 1.05)
-      .addLabel('s3', T.s3)
-      .to({}, { duration: T.end - T.s3 });
-
-    var trackLen = matchLine.getTotalLength(), sp = { t: 0, o: 0 };
-    var drawSpark = function () {
-      var pt = matchLine.getPointAtLength(Math.max(0, Math.min(1, sp.t)) * trackLen);
-      spark.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1) + ')');
-      spark.setAttribute('opacity', sp.o.toFixed(2));
-    };
-    var sparkTl = gsap.timeline({ repeat: -1, paused: true, onUpdate: drawSpark })
-      .fromTo(sp, { t: 0 }, { t: 1, duration: 1.3, ease: 'power1.inOut' }, 0)
-      .fromTo(sp, { o: 0 }, { o: 1, duration: 0.2 }, 0)
-      .to(sp, { o: 0, duration: 0.2 }, 1.1)
-      .fromTo(sp, { t: 1 }, { t: 0, duration: 1.3, ease: 'power1.inOut' }, 1.8)
-      .fromTo(sp, { o: 0 }, { o: 1, duration: 0.2 }, 1.8)
-      .to(sp, { o: 0, duration: 0.2 }, 2.9)
-      .to({}, { duration: 0.5 }, 3.1);
+      .to(mark, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.6)' }, T.b3 + 0.6)
+      .to(matchLine, { strokeDashoffset: 0, duration: 0.5 }, T.b3 + 0.75)
+      .addLabel('s3', T.s3);
 
     var current = 0;
     var stepAt = function (time) { return time < T.b2 ? 1 : time < T.b3 ? 2 : 3; };
-    var show = function (n, announce) {
-      if (n !== current) {
-        current = n;
-        tabs.forEach(function (t, i) {
-          var on = i + 1 === n;
-          t.setAttribute('aria-selected', String(on));
-          t.tabIndex = on ? 0 : -1;
-          t.classList.toggle('is-done', i + 1 < n);
-        });
-        texts.forEach(function (el, i) {
-          var on = i + 1 === n;
-          el.classList.toggle('is-active', on);
-          if (on && motion) gsap.fromTo(el, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out', overwrite: true });
-        });
-        stage.setAttribute('aria-labelledby', 'tab-' + n);
-        back.setAttribute('aria-disabled', String(n === 1));
-        next.hidden = n === 3;
-        if (announce !== false) status.textContent = told[n - 1];
-      }
-      var landed = n === 3 && tl.time() >= T.s3 - 0.05;
-      if (landed && motion) { if (!sparkTl.isActive()) sparkTl.restart(); }
-      else { sparkTl.pause(0); sp.o = 0; drawSpark(); }
+    var show = function (n) {
+      if (n === current) return;
+      current = n;
+      tabs.forEach(function (t, i) {
+        var on = i + 1 === n;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        t.classList.toggle('is-done', i + 1 < n);
+      });
+      texts.forEach(function (el, i) {
+        var on = i + 1 === n;
+        el.classList.toggle('is-active', on);
+        if (on) gsap.fromTo(el, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out', overwrite: true });
+      });
+      stage.setAttribute('aria-labelledby', 'tab-' + n);
+      if (!playing) status.textContent = told[n - 1];
     };
-
     var horizontal = function () { return window.matchMedia('(max-width: 1023px), (pointer: coarse)').matches; };
-    var fillTo = function (p) { gsap.set(fill, horizontal() ? { scaleX: p, scaleY: 1 } : { scaleY: p, scaleX: 1 }); };
     tl.eventCallback('onUpdate', function () {
       show(stepAt(tl.time()));
-      fillTo(Math.min(1, tl.time() / T.s3));
+      var p = Math.min(1, tl.time() / T.s3);
+      gsap.set(fill, horizontal() ? { scaleX: p, scaleY: 1 } : { scaleY: p, scaleX: 1 });
     });
 
-    var labelFor = function (n) { return [T.s1, T.s2, T.s3][n - 1]; };
+    // The loop: build each step, hold it, then clear and start again
+    var HOLD = 2.6;
+    var loop = gsap.timeline({ repeat: -1, paused: true })
+      .add(tl.tweenFromTo(0, 's1', { duration: 0.9, immediateRender: false }))
+      .addLabel('h1')
+      .to({}, { duration: HOLD })
+      .add(tl.tweenFromTo('s1', 's2', { duration: 1.4, immediateRender: false }))
+      .addLabel('h2')
+      .to({}, { duration: HOLD })
+      .add(tl.tweenFromTo('s2', 's3', { duration: 1.4, immediateRender: false }))
+      .addLabel('h3')
+      .to({}, { duration: HOLD + 0.6 })
+      .to(scene, { opacity: 0, duration: 0.35 })
+      .add(function () { tl.pause(0); })
+      .to(scene, { opacity: 1, duration: 0.25 });
+
+    var playing = true, onScreen = false;
+    var setPlaying = function (on) {
+      playing = on;
+      pauseBtn.textContent = on ? 'Pause' : 'Play';
+      pauseBtn.setAttribute('aria-pressed', String(!on));
+      if (on && onScreen) loop.play('h' + Math.max(1, current));
+      else loop.pause();
+    };
+    pauseBtn.addEventListener('click', function () { setPlaying(!playing); });
+
     var goTo = function (n, focus) {
       n = Math.max(1, Math.min(3, n));
-      var pin = pins.how;
-      if (pin) {
-        window.scrollTo({ top: Math.round(pin.start + (labelFor(n) / T.end) * (pin.end - pin.start)), behavior: motion ? 'smooth' : 'auto' });
-      } else if (motion) {
-        tl.tweenTo(labelFor(n), { duration: 0.9, ease: 'power2.inOut' });
-      } else {
-        tl.seek(labelFor(n), false); show(n); fillTo(Math.min(1, labelFor(n) / T.s3));
-      }
+      setPlaying(false);
+      gsap.to(scene, { opacity: 1, duration: 0.1 });
+      tl.tweenTo('s' + n, { duration: 0.8, ease: 'power2.inOut' });
+      status.textContent = told[n - 1];
       if (focus) tabs[n - 1].focus();
     };
-
     tabs.forEach(function (t, i) {
       t.addEventListener('click', function () { goTo(i + 1); });
       t.addEventListener('keydown', function (e) {
@@ -235,37 +233,15 @@ var LAB_PROFILE_URL = '';
         else if (k === 'End') n = 3;
         if (n) { e.preventDefault(); goTo(n, true); }
       });
-      t.addEventListener('focus', function () {
-        var pin = pins.how;
-        if (pin && (window.scrollY < pin.start || window.scrollY > pin.end)) goTo(i + 1);
-      });
     });
-    back.addEventListener('click', function () { if (current > 1) goTo(current - 1); });
-    next.addEventListener('click', function () { goTo(current + 1); });
 
-    var sx = null, sy = 0;
-    stage.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse' && !pins.how) { sx = e.clientX; sy = e.clientY; } });
-    stage.addEventListener('pointerup', function (e) {
-      if (sx === null) return;
-      var dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) goTo(current + (dx < 0 ? 1 : -1));
-    });
-    stage.addEventListener('pointercancel', function () { sx = null; });
-
-    gsap.matchMedia().add({ pin: PIN, step: STEP }, function (ctx) {
-      tl.pause(0);
-      if (ctx.conditions.pin) {
-        how.classList.add('is-pinned');
-        pins.how = ScrollTrigger.create({
-          trigger: how, start: 'top top', end: '+=300%', pin: true, scrub: 0.8, animation: tl,
-          onLeave: function () { show(3); }, invalidateOnRefresh: true
-        });
-        show(1, false);
-        return function () { how.classList.remove('is-pinned'); delete pins.how; };
+    show(1);
+    ScrollTrigger.create({
+      trigger: how, start: 'top 75%', end: 'bottom top',
+      onToggle: function (self) {
+        onScreen = self.isActive;
+        if (onScreen && playing) loop.resume(); else loop.pause();
       }
-      show(1, false);
-      if (motion) once(stage, function () { tl.tweenTo(T.s1, { duration: 0.7, ease: 'power2.out' }); }, 'top 75%');
-      else { tl.seek(T.s1, false); show(1, false); fillTo(T.s1 / T.s3); }
     });
   })();
 

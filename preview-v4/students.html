@@ -31,7 +31,7 @@
 <body>
 <a class="visually-hidden skip" href="#main">Skip to content</a>
 <svg class="sprite" aria-hidden="true" focusable="false">
-  <defs>
+  <defs><symbol id="icon-lab-form" viewBox="0 0 24 24"><rect x="4.5" y="4" width="15" height="17.5" rx="2"/><rect x="8.5" y="2.5" width="7" height="3.5" rx="1"/><path d="M8 10.5h8M8 14h8M8 17.5h5"/></symbol>
     <filter id="glow" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
     <filter id="sticker" x="-20%" y="-20%" width="140%" height="140%"><feMorphology in="SourceAlpha" operator="dilate" radius="4" result="d"/><feFlood flood-color="#FFFFFF"/><feComposite in2="d" operator="in" result="o"/><feMerge><feMergeNode in="o"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     <clipPath id="tile-clip"><rect x="-26" y="-26" width="52" height="52" rx="8"/></clipPath>
@@ -47,9 +47,8 @@
     <a class="brand" href="index.html"><img src="assets/rr-logo-primary.svg" width="132" height="43" alt="Research Reach"></a>
     <nav class="site-nav" id="site-nav" aria-label="Main">
       <ul>
-        <li><a href="index.html#how">How it works</a></li>
-        <li><a href="index.html#why">Why labs join</a></li>
-        <li><a href="index.html#questions">Questions</a></li>
+        <li><a href="#after">How it works</a></li>
+        <li><a href="#questions">Questions</a></li>
         <li><a href="students.html" aria-current="page">For students</a></li>
       </ul>
     </nav>
@@ -77,11 +76,10 @@
         <p class="fact"><span class="big">1 in 3</span><span class="big-label">first-year students plan to do research with faculty</span></p>
         <p class="fact"><span class="big">1 in 16</span><span class="big-label">get into a lab their first year</span></p>
       </div>
-      <p class="source">NSSE 2023 and 2024</p>
     </div>
   </section>
 
-  <section class="after" aria-labelledby="after-title">
+  <section class="after" id="after" aria-labelledby="after-title">
     <div class="grid">
       <h2 class="h2" id="after-title">What happens after you submit</h2>
       <ol class="after-steps"><li><span class="lane-num" aria-hidden="true">1</span><div><h3>You fill out one profile</h3><p>Five minutes, with your IU email</p></div></li><li><span class="lane-num" aria-hidden="true">2</span><div><h3>We screen for fit</h3><p>We check you against what each lab looks for</p></div></li><li><span class="lane-num" aria-hidden="true">3</span><div><h3>We email you when there is a match</h3><p>Nothing to do in between</p></div></li></ol>
@@ -91,7 +89,7 @@
   <section class="questions" id="questions" aria-labelledby="sq-title">
     <div class="grid">
       <h2 class="h2" id="sq-title">Questions students ask</h2>
-      <div class="questions-body"><div class="faq"><details open><summary>Does it cost anything<svg class="faq-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M0 8h16"/><path class="faq-v" d="M8 0v16"/></svg></summary><div class="answer"><p>No</p></div></details><details open><summary>Who sees my profile<svg class="faq-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M0 8h16"/><path class="faq-v" d="M8 0v16"/></svg></summary><div class="answer"><p>Only us, and the lab we introduce you to</p></div></details><details open><summary>Do I need research experience<svg class="faq-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M0 8h16"/><path class="faq-v" d="M8 0v16"/></svg></summary><div class="answer"><p><span class="placeholder">Placeholder: whether experience is needed</span></p></div></details><details open><summary>Does this get me a spot in a lab<svg class="faq-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M0 8h16"/><path class="faq-v" d="M8 0v16"/></svg></summary><div class="answer"><p>We introduce you to a lab that fits. The lab decides who joins</p></div></details><details open><summary>I’m a freshman. Is it too early<svg class="faq-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M0 8h16"/><path class="faq-v" d="M8 0v16"/></svg></summary><div class="answer"><p>No. Faculty prefer to train students early</p></div></details></div></div>
+      <div class="questions-body"><div class="faq"><details open><summary>Does it cost anything to apply?<svg class="faq-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M0 8h16"/><path class="faq-v" d="M8 0v16"/></svg></summary><div class="answer"><p>Not a thing. Research Reach is completely free for students</p></div></details><details open><summary>Who will see my profile?<svg class="faq-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M0 8h16"/><path class="faq-v" d="M8 0v16"/></svg></summary><div class="answer"><p>Only our team and the lab we introduce you to. Your profile is never posted for anyone to browse</p></div></details><details open><summary>Do I need research experience to apply?<svg class="faq-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M0 8h16"/><path class="faq-v" d="M8 0v16"/></svg></summary><div class="answer"><p>No, research experience is not necessary at all. If you have some, that is a plus, but we look at many things beyond it, like your interests, your schedule and how long you hope to stay in a lab</p></div></details><details open><summary>Does applying get me a spot in a lab?<svg class="faq-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M0 8h16"/><path class="faq-v" d="M8 0v16"/></svg></summary><div class="answer"><p>We introduce you to a lab that fits what you are looking for. From there the lab makes the final call, and we will be rooting for you</p></div></details><details open><summary>I’m a freshman. Is it too early to apply?<svg class="faq-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M0 8h16"/><path class="faq-v" d="M8 0v16"/></svg></summary><div class="answer"><p>Not at all. Faculty told us they love training students early, so your first year is a great time to start</p></div></details></div></div>
     </div>
   </section>
 

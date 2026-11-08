@@ -195,7 +195,8 @@ section { scroll-margin-top: var(--header-space); }
 .svg-title { font: 700 30px/1 var(--font-display); fill: var(--ink-navy); }
 .svg-line { font: 400 20px/1 var(--font-text); fill: var(--slate); }
 .svg-tag { font: 600 20px/1 var(--font-text); fill: var(--slate); }
-g.badge { stroke: none; }
+g.badge { stroke: none; stroke-opacity: 1; }
+.app-icon { fill: none; stroke: var(--reach-blue); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
 .word { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .14em; margin-bottom: -.14em; }
 .word > span { display: inline-block; }
@@ -255,27 +256,6 @@ g.badge { stroke: none; }
   .minis dt { font-size: 26px; line-height: 32px; }
 }
 
-/* Why labs join */
-
-.why { background: var(--panel-blue); padding-block: 96px; }
-.why h2 { grid-column: 1 / 5; }
-.why-body { grid-column: 5 / 13; }
-.benefits { display: grid; grid-template-columns: 1fr 1fr; column-gap: 48px; }
-.benefit { display: flex; align-items: baseline; gap: 20px; padding-block: 24px; border-top: 1px solid var(--fog); }
-.benefit-num { font: 600 15px/22px var(--font-text); color: var(--reach-blue); }
-.benefit h3 { font-size: 24px; line-height: 32px; }
-
-@media (max-width: 1023px) {
-  .why h2, .why-body { grid-column: 1 / -1; }
-  .why-body { margin-top: 32px; }
-}
-
-@media (max-width: 767px) {
-  .why { padding-block: 64px; }
-  .benefits { grid-template-columns: 1fr; }
-  .benefit { padding-block: 16px; }
-  .benefit h3 { font-size: 20px; line-height: 28px; }
-}
 /* How it works */
 
 .how { background: var(--pale-sky); scroll-margin-top: 0; }
@@ -649,6 +629,21 @@ html:not(.js) .stage { max-width: 720px; }
 /* Version 4 additions */
 
 .how-cta { grid-area: 2 / 1; margin-top: 32px; }
+.how .step-controls { display: flex; grid-column: 1 / -1; justify-content: flex-start; margin-top: 8px; }
+.js .how .step-controls { display: flex; }
+.how-pause { min-height: 44px; }
+.how-static { display: none; margin-top: 48px; }
+.how-frames { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); }
+.how-frame { display: grid; gap: 16px; align-content: start; }
+.how-frame .stage { grid-column: auto; }
+.how-frame .scene { width: 100%; height: auto; }
+.how-frame-head { display: grid; grid-template-columns: 40px 1fr; column-gap: 16px; align-items: start; }
+.how-frame-head .rail-num { background: var(--reach-blue); border-color: var(--reach-blue); color: var(--white); }
+.how-frame h3 { font-size: 22px; line-height: 30px; }
+.how-frame p { color: var(--slate); font-size: 16px; line-height: 24px; }
+.how-static .cta { margin-top: 40px; }
+html:not(.motion) .how .steps { display: none; }
+html:not(.motion) .how-static { display: block; }
 .js .how-cta { align-self: start; }
 
 .facts-band { background: var(--pale-sky); padding-block: 64px; }
@@ -668,9 +663,16 @@ html:not(.js) .stage { max-width: 720px; }
 .faculty-line .wrap { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; color: var(--slate); font-size: 15px; }
 
 @media (max-width: 1023px) {
+  .how-frames { grid-template-columns: 1fr; gap: 40px; max-width: 560px; }
   .after h2, .after-steps { grid-column: 1 / -1; }
   .after-steps { margin-top: 32px; }
   .how-cta { margin-top: 24px; }
+}
+
+@media (max-width: 599px) {
+  .hero-scene .svg-tag { font-size: 26px; }
+  .hero-scene .svg-line { font-size: 26px; }
+  .hero-scene .svg-title { font-size: 38px; }
 }
 
 @media (max-width: 767px) {
