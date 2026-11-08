@@ -7,6 +7,7 @@ var LAB_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish%
 var LAB_GMAIL = 'https://mail.google.com/mail/?view=cm&fs=1&to=patemish%40iu.edu&su=Bringing%20my%20lab%20into%20Research%20Reach&body=Hi%2C%0A%0AI%27d%20like%20to%20bring%20my%20lab%20into%20Research%20Reach.%0A%0AName%3A%0ALab%20or%20PI%3A%0ADepartment%3A%0AWhat%20I%20look%20for%20in%20a%20student%3A%0AA%20few%20times%20that%20work%20to%20talk%3A%0A';
 var COHORT_LINE = '';
 var LAB_PROFILE_URL = '';
+var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish%40iu.edu&subject=Bringing%20Research%20Reach%20to%20my%20department&body=Hi%2C%0A%0AI%27d%20like%20to%20talk%20about%20bringing%20Research%20Reach%20to%20my%20department.%0A%0AName%3A%0ARole%3A%0ADepartment%3A%0AA%20few%20times%20that%20work%20to%20talk%3A%0A';
 
 (function () {
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -22,6 +23,7 @@ var LAB_PROFILE_URL = '';
   $$('[data-link="lab-outlook"]').forEach(function (a) { a.href = LAB_PROFILE_URL || LAB_OUTLOOK; });
   if (LAB_PROFILE_URL) $$('.email-only').forEach(function (el) { el.hidden = true; });
   $$('[data-link="lab-gmail"]').forEach(function (a) { a.href = LAB_GMAIL; });
+  $$('[data-link="dept-outlook"]').forEach(function (a) { a.href = DEPT_OUTLOOK; });
   $$('[data-print="student"]').forEach(function (el) { el.textContent = STUDENT_FORM_URL.replace(/^https:\/\//, ''); });
   var cohort = $('.cohort-line');
   if (cohort && COHORT_LINE) { cohort.textContent = COHORT_LINE; cohort.hidden = false; }
@@ -45,7 +47,7 @@ var LAB_PROFILE_URL = '';
   var pins = {};
   var headerSpace = function () { return window.innerWidth < 600 ? 80 : 96; };
   var topOf = function (el) {
-    return Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - (el.id === 'how' ? 0 : headerSpace())));
+    return Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - headerSpace()));
   };
   var glide = function (el) {
     window.scrollTo({ top: topOf(el), behavior: motion ? 'smooth' : 'auto' });
@@ -134,13 +136,13 @@ var LAB_PROFILE_URL = '';
     var items = $$('.item', scene), fits = items.filter(function (i) { return i.classList.contains('fit'); });
     var misses = items.filter(function (i) { return !i.classList.contains('fit'); });
     var chosen = $('.item.chosen', scene), others = items.filter(function (i) { return i !== chosen; });
-    var studentG = $('.student', scene), profG = $('.prof', scene), hold = $('.pose-hold', profG), reach = $('.pose-reach', profG);
-    var matchLine = $('.match-line', scene), mark = $('.match-glow', scene);
+    var profG = $('.prof', scene), hold = $('.pose-hold', profG), reach = $('.pose-reach', profG);
+    var mail = $('.mail-wrap', scene);
     var tile = function (el) { return $('.tile', el); };
     var told = [
       'Step 1 of 3, Tell us what you look for. The Professor holds a profile of what the lab needs.',
       'Step 2 of 3, We screen every student. Student portraits appear. Four fade out and three that fit are outlined.',
-      'Step 3 of 3, Meet only the students who fit. One Student and the Professor reach toward the Research Reach mark.'
+      'Step 3 of 3, Meet only the students who fit. An introduction email from Research Reach lands in the Professor\'s hand.'
     ];
     // Each step builds, then holds so it can be read
     var H = 2.8, B1 = 0, S1 = 0.9, B2 = S1 + H, S2 = B2 + 1.3, B3 = S2 + H, S3 = B3 + 1.4, END = S3 + H;
@@ -149,13 +151,11 @@ var LAB_PROFILE_URL = '';
       gsap.set(profG, { x: 320, y: 410, opacity: 0 });
       gsap.set(hold, { opacity: 1 });
       gsap.set(reach, { opacity: 0 });
-      gsap.set(studentG, { x: 140, y: 410, opacity: 0 });
+      gsap.set(mail, { x: 250, y: 214, scale: 0.5, opacity: 0, transformOrigin: '50% 50%' });
       items.forEach(function (it) {
         gsap.set(it, { x: +it.dataset.x, y: +it.dataset.y, scale: 0.8, opacity: 0, transformOrigin: '50% 50%' });
         gsap.set(tile(it), { stroke: '#C9D1DC', strokeWidth: 1.5 });
       });
-      gsap.set(matchLine, { strokeDashoffset: 1 });
-      gsap.set(mark, { opacity: 0, scale: 0.4, transformOrigin: '50% 50%' });
     };
     start();
 
@@ -170,14 +170,13 @@ var LAB_PROFILE_URL = '';
       .to(fits.map(tile), { stroke: '#185FA5', strokeWidth: 3, duration: 0.3 }, B2 + 0.8)
       .addLabel('h2', S2)
       .to(others, { opacity: 0, duration: 0.35 }, B3)
-      .to(chosen, { x: 140, y: 167, scale: 1.3, duration: 0.45 }, B3 + 0.1)
-      .to(chosen, { opacity: 0, duration: 0.25 }, B3 + 0.45)
-      .to(studentG, { y: 382, opacity: 1, duration: 0.45, ease: 'expo.out' }, B3 + 0.4)
+      .to(chosen, { x: 202, y: 230, scale: 1.1, duration: 0.45 }, B3 + 0.1)
+      .to(chosen, { opacity: 0, duration: 0.2 }, B3 + 0.5)
+      .to(mail, { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' }, B3 + 0.45)
       .to(profG, { x: 500, duration: 0.45 }, B3 + 0.2)
       .to(hold, { opacity: 0, duration: 0.25 }, B3 + 0.35)
       .to(reach, { opacity: 1, duration: 0.25 }, B3 + 0.35)
-      .to(mark, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.6)' }, B3 + 0.6)
-      .to(matchLine, { strokeDashoffset: 0, duration: 0.5 }, B3 + 0.75)
+      .to(mail, { x: 318, y: 206, duration: 0.6 }, B3 + 0.95)
       .addLabel('h3', S3)
       .to(scene, { opacity: 0, duration: 0.4 }, END - 0.4);
 
