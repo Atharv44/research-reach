@@ -80,28 +80,39 @@ var LAB_PROFILE_URL = '';
     });
   };
 
-  /* The hero: the Student and the Professor reach for the Research Reach mark */
+  /* The hero: both applications travel into the Research Reach mark */
   var hero = $('.hero-scene');
   if (hero && motion) (function () {
-    var figs = $$('.h-fig', hero), line = $('.m-line', hero), mark = $('.hero-badge', hero);
+    var figs = $$('.h-fig', hero), trails = $$('.h-trail', hero), mark = $('.hero-badge', hero);
     var ring = $('.badge-ring', mark), caption = $('.m-caption', hero), tags = $$('.svg-tag', hero);
-    var apps = $$('.app', hero), trails = $$('.app-trail', hero);
-    gsap.set(apps, { scale: 0.4, opacity: 0, transformOrigin: '50% 50%' });
-    gsap.set(trails, { opacity: 0 });
-    gsap.set(line, { strokeDashoffset: 1 });
+    var docs = [[$('.doc-s', hero), trails[0]], [$('.doc-p', hero), trails[1]]];
     gsap.set(mark, { scale: 0.4, opacity: 0, transformOrigin: '50% 50%' });
+    gsap.set(trails, { opacity: 0 });
     gsap.set([caption].concat(tags), { opacity: 0, y: 8 });
+    var p = { t: 0, o: 0 };
+    var draw = function () {
+      docs.forEach(function (d) {
+        var len = d[1].getTotalLength(), pt = d[1].getPointAtLength(len * p.t);
+        d[0].setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1) + ') scale(' + (1 - p.t * 0.45).toFixed(3) + ')');
+        d[0].setAttribute('opacity', p.o.toFixed(2));
+      });
+    };
+    var flow = gsap.timeline({ repeat: -1, paused: true, onUpdate: draw })
+      .fromTo(p, { t: 0, o: 0 }, { o: 1, duration: 0.25 }, 0)
+      .to(p, { t: 1, duration: 1.3, ease: 'power1.inOut' }, 0)
+      .to(p, { o: 0, duration: 0.2 }, 1.15)
+      .fromTo(mark, { scale: 1 }, { scale: 1.1, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out' }, 1.3)
+      .fromTo(ring, { opacity: 0.6 }, { opacity: 1, duration: 0.3, yoyo: true, repeat: 1 }, 1.3)
+      .to({}, { duration: 1.2 }, 1.7);
     gsap.timeline({ delay: 0.3 })
       .from(figs[0], { x: '-=60', opacity: 0, duration: 0.9, ease: 'expo.out' }, 0)
       .from(figs[1], { x: '+=60', opacity: 0, duration: 0.9, ease: 'expo.out' }, 0)
       .to(tags, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, 0.5)
       .to(mark, { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.6)' }, 0.7)
-      .to(line, { strokeDashoffset: 0, duration: 0.7, ease: 'power2.inOut' }, 0.9)
-      .to(apps, { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.12 }, 0.45)
-      .to(trails, { opacity: 1, duration: 0.5 }, 0.75)
-      .to(caption, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, 1.4);
-    var pulse = gsap.to(ring, { scale: 1.12, opacity: 0.55, transformOrigin: '50% 50%', duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 2 });
-    idle(hero, [pulse]);
+      .to(trails, { opacity: 1, duration: 0.5 }, 0.9)
+      .to(caption, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, 1.2)
+      .add(function () { flow.play(); }, 1.4);
+    idle(hero, [flow]);
   })();
 
   /* Questions: closed with JavaScript, open without it. Answers fade in 4 px */
@@ -114,12 +125,12 @@ var LAB_PROFILE_URL = '';
     });
   });
 
-  /* How it works: plays 1, 2, 3 on its own and loops. Pause, or pick a step */
+  /* How it works: plays 1, 2, 3 on its own and keeps looping. Clicking a step jumps there */
   var how = $('.how');
   if (how && motion) (function () {
     var stage = $('#stage'), scene = $('.scene', stage);
     var tabs = $$('.rail-step', how), texts = $$('.step-text', how), fill = $('.rail-fill', how);
-    var status = $('#stage-status'), pauseBtn = $('.how-pause', how);
+    var status = $('#stage-status');
     var items = $$('.item', scene), fits = items.filter(function (i) { return i.classList.contains('fit'); });
     var misses = items.filter(function (i) { return !i.classList.contains('fit'); });
     var chosen = $('.item.chosen', scene), others = items.filter(function (i) { return i !== chosen; });
@@ -131,40 +142,48 @@ var LAB_PROFILE_URL = '';
       'Step 2 of 3, We screen every student. Student portraits appear. Four fade out and three that fit are outlined.',
       'Step 3 of 3, Meet only the students who fit. One Student and the Professor reach toward the Research Reach mark.'
     ];
-    var T = { s1: 0.6, b2: 1.2, s2: 2.3, b3: 2.9, s3: 4.0 };
+    // Each step builds, then holds so it can be read
+    var H = 2.8, B1 = 0, S1 = 0.9, B2 = S1 + H, S2 = B2 + 1.3, B3 = S2 + H, S3 = B3 + 1.4, END = S3 + H;
 
-    gsap.set(profG, { x: 320, y: 410, opacity: 0 });
-    gsap.set(hold, { opacity: 1 });
-    gsap.set(reach, { opacity: 0 });
-    gsap.set(studentG, { x: 140, y: 410, opacity: 0 });
-    items.forEach(function (it) {
-      gsap.set(it, { x: +it.dataset.x, y: +it.dataset.y, scale: 0.8, opacity: 0, transformOrigin: '50% 50%' });
-      gsap.set(tile(it), { stroke: '#C9D1DC', strokeWidth: 1.5 });
-    });
-    gsap.set(matchLine, { strokeDashoffset: 1 });
-    gsap.set(mark, { opacity: 0, scale: 0.4, transformOrigin: '50% 50%' });
+    var start = function () {
+      gsap.set(profG, { x: 320, y: 410, opacity: 0 });
+      gsap.set(hold, { opacity: 1 });
+      gsap.set(reach, { opacity: 0 });
+      gsap.set(studentG, { x: 140, y: 410, opacity: 0 });
+      items.forEach(function (it) {
+        gsap.set(it, { x: +it.dataset.x, y: +it.dataset.y, scale: 0.8, opacity: 0, transformOrigin: '50% 50%' });
+        gsap.set(tile(it), { stroke: '#C9D1DC', strokeWidth: 1.5 });
+      });
+      gsap.set(matchLine, { strokeDashoffset: 1 });
+      gsap.set(mark, { opacity: 0, scale: 0.4, transformOrigin: '50% 50%' });
+    };
+    start();
 
-    var tl = gsap.timeline({ paused: true, defaults: { ease: 'power2.inOut' } })
-      .to(profG, { y: 382, opacity: 1, duration: 0.55, ease: 'expo.out' }, 0)
-      .addLabel('s1', T.s1)
-      .to(profG, { x: 520, duration: 0.5 }, T.b2)
-      .to(items, { opacity: 1, scale: 1, duration: 0.5, stagger: 0.05, ease: 'expo.out' }, T.b2 + 0.1)
-      .to(misses, { opacity: 0.25, duration: 0.4 }, T.b2 + 0.6)
-      .to(fits.map(tile), { stroke: '#185FA5', strokeWidth: 3, duration: 0.3 }, T.b2 + 0.65)
-      .addLabel('s2', T.s2)
-      .to(others, { opacity: 0, duration: 0.35 }, T.b3)
-      .to(chosen, { x: 140, y: 167, scale: 1.3, duration: 0.45 }, T.b3 + 0.1)
-      .to(chosen, { opacity: 0, duration: 0.25 }, T.b3 + 0.45)
-      .to(studentG, { y: 382, opacity: 1, duration: 0.45, ease: 'expo.out' }, T.b3 + 0.4)
-      .to(profG, { x: 500, duration: 0.45 }, T.b3 + 0.2)
-      .to(hold, { opacity: 0, duration: 0.25 }, T.b3 + 0.35)
-      .to(reach, { opacity: 1, duration: 0.25 }, T.b3 + 0.35)
-      .to(mark, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.6)' }, T.b3 + 0.6)
-      .to(matchLine, { strokeDashoffset: 0, duration: 0.5 }, T.b3 + 0.75)
-      .addLabel('s3', T.s3);
+    var loop = gsap.timeline({ repeat: -1, paused: true, defaults: { ease: 'power2.inOut' } })
+      .add(start, 0)
+      .fromTo(scene, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0)
+      .to(profG, { y: 382, opacity: 1, duration: 0.6, ease: 'expo.out' }, 0.1)
+      .addLabel('h1', S1)
+      .to(profG, { x: 520, duration: 0.5 }, B2)
+      .to(items, { opacity: 1, scale: 1, duration: 0.5, stagger: 0.05, ease: 'expo.out' }, B2 + 0.1)
+      .to(misses, { opacity: 0.25, duration: 0.4 }, B2 + 0.7)
+      .to(fits.map(tile), { stroke: '#185FA5', strokeWidth: 3, duration: 0.3 }, B2 + 0.8)
+      .addLabel('h2', S2)
+      .to(others, { opacity: 0, duration: 0.35 }, B3)
+      .to(chosen, { x: 140, y: 167, scale: 1.3, duration: 0.45 }, B3 + 0.1)
+      .to(chosen, { opacity: 0, duration: 0.25 }, B3 + 0.45)
+      .to(studentG, { y: 382, opacity: 1, duration: 0.45, ease: 'expo.out' }, B3 + 0.4)
+      .to(profG, { x: 500, duration: 0.45 }, B3 + 0.2)
+      .to(hold, { opacity: 0, duration: 0.25 }, B3 + 0.35)
+      .to(reach, { opacity: 1, duration: 0.25 }, B3 + 0.35)
+      .to(mark, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.6)' }, B3 + 0.6)
+      .to(matchLine, { strokeDashoffset: 0, duration: 0.5 }, B3 + 0.75)
+      .addLabel('h3', S3)
+      .to(scene, { opacity: 0, duration: 0.4 }, END - 0.4);
 
     var current = 0;
-    var stepAt = function (time) { return time < T.b2 ? 1 : time < T.b3 ? 2 : 3; };
+    var stepAt = function (t) { return t < B2 ? 1 : t < B3 ? 2 : 3; };
+    var horizontal = function () { return window.matchMedia('(max-width: 1023px), (pointer: coarse)').matches; };
     var show = function (n) {
       if (n === current) return;
       current = n;
@@ -180,46 +199,20 @@ var LAB_PROFILE_URL = '';
         if (on) gsap.fromTo(el, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out', overwrite: true });
       });
       stage.setAttribute('aria-labelledby', 'tab-' + n);
-      if (!playing) status.textContent = told[n - 1];
     };
-    var horizontal = function () { return window.matchMedia('(max-width: 1023px), (pointer: coarse)').matches; };
-    tl.eventCallback('onUpdate', function () {
-      show(stepAt(tl.time()));
-      var p = Math.min(1, tl.time() / T.s3);
-      gsap.set(fill, horizontal() ? { scaleX: p, scaleY: 1 } : { scaleY: p, scaleX: 1 });
+    loop.eventCallback('onUpdate', function () {
+      var t = loop.time();
+      show(stepAt(t));
+      var prog = t < S1 ? t / S1 / 3 : t < B2 ? 1 / 3 : t < S2 ? 1 / 3 + (t - B2) / (S2 - B2) / 3 : t < B3 ? 2 / 3 : Math.min(1, 2 / 3 + (t - B3) / (S3 - B3) / 3);
+      gsap.set(fill, horizontal() ? { scaleX: prog, scaleY: 1 } : { scaleY: prog, scaleX: 1 });
     });
 
-    // The loop: build each step, hold it, then clear and start again
-    var HOLD = 2.6;
-    var loop = gsap.timeline({ repeat: -1, paused: true })
-      .add(tl.tweenFromTo(0, 's1', { duration: 0.9, immediateRender: false }))
-      .addLabel('h1')
-      .to({}, { duration: HOLD })
-      .add(tl.tweenFromTo('s1', 's2', { duration: 1.4, immediateRender: false }))
-      .addLabel('h2')
-      .to({}, { duration: HOLD })
-      .add(tl.tweenFromTo('s2', 's3', { duration: 1.4, immediateRender: false }))
-      .addLabel('h3')
-      .to({}, { duration: HOLD + 0.6 })
-      .to(scene, { opacity: 0, duration: 0.35 })
-      .add(function () { tl.pause(0); })
-      .to(scene, { opacity: 1, duration: 0.25 });
-
-    var playing = true, onScreen = false;
-    var setPlaying = function (on) {
-      playing = on;
-      pauseBtn.textContent = on ? 'Pause' : 'Play';
-      pauseBtn.setAttribute('aria-pressed', String(!on));
-      if (on && onScreen) loop.play('h' + Math.max(1, current));
-      else loop.pause();
-    };
-    pauseBtn.addEventListener('click', function () { setPlaying(!playing); });
-
+    // Picking a step jumps to it and the loop carries on from there
     var goTo = function (n, focus) {
       n = Math.max(1, Math.min(3, n));
-      setPlaying(false);
-      gsap.to(scene, { opacity: 1, duration: 0.1 });
-      tl.tweenTo('s' + n, { duration: 0.8, ease: 'power2.inOut' });
+      loop.seek('h' + n, false);
+      loop.play();
+      show(stepAt(loop.time()));
       status.textContent = told[n - 1];
       if (focus) tabs[n - 1].focus();
     };
@@ -237,11 +230,8 @@ var LAB_PROFILE_URL = '';
 
     show(1);
     ScrollTrigger.create({
-      trigger: how, start: 'top 75%', end: 'bottom top',
-      onToggle: function (self) {
-        onScreen = self.isActive;
-        if (onScreen && playing) loop.resume(); else loop.pause();
-      }
+      trigger: how, start: 'top 80%', end: 'bottom top',
+      onToggle: function (self) { self.isActive ? loop.play() : loop.pause(); }
     });
   })();
 

@@ -77,6 +77,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .small { font-size: 15px; line-height: 22px; }
 .mono { font: 400 15px/22px 'IBM Plex Mono', monospace; }
 
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .display { font-size: 56px; line-height: 60px; }
+}
+
 @media (max-width: 767px) {
   .display { font-size: 44px; line-height: 48px; }
   .h2 { font-size: 30px; line-height: 36px; }
