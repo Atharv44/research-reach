@@ -742,7 +742,7 @@ html:not(.motion) .how-static { display: block; }
 
 .journey-sec { padding-block: 32px 96px; }
 .journey { margin-top: 48px; }
-.journey li { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: center; padding-block: 40px; border-top: 1px solid var(--fog); }
+.journey > li { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: center; padding-block: 40px; border-top: 1px solid var(--fog); }
 .journey-copy { grid-column: 1 / 7; display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 20px; align-items: start; }
 .journey-copy h3 { font-size: 28px; line-height: 36px; }
 .journey-copy h3 + p { margin-top: 8px; color: var(--slate); max-width: 26em; }
@@ -783,6 +783,14 @@ html:not(.motion) .how-static { display: block; }
 .trust-item h3 { font-size: 22px; line-height: 30px; }
 .trust-item p { color: var(--slate); }
 .closing-plain { padding-bottom: 96px; }
+.factors { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--fog); }
+.factors-tag { font: 600 15px/22px var(--font-text); color: var(--slate); }
+.factors ul { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.factors li { padding: 6px 14px; border-radius: 999px; background: var(--pale-sky); font: 500 15px/22px var(--font-text); }
+.home-doors { background: none; padding-block: 0 64px; }
+.home-doors .door { background: var(--pale-sky); border: 0; }
+.home-doors .door .button { margin-top: 4px; }
+.home-proof { margin-top: 0; margin-bottom: 96px; }
 
 @media (min-width: 960px) and (max-width: 1199px) {
   .site-nav ul { gap: 20px; }
@@ -817,7 +825,7 @@ html:not(.motion) .how-static { display: block; }
   .quote blockquote { font-size: 22px; line-height: 32px; }
   .timebars { padding: 24px 20px; }
   .timebar-num { font-size: 40px; line-height: 44px; }
-  .journey li { padding-block: 32px; }
+  .journey > li { padding-block: 32px; }
   .journey-copy h3 { font-size: 24px; line-height: 32px; }
   .tally { padding: 0 8px 64px; }
   .tally .color-block { padding: 48px 20px; border-radius: 24px; }
