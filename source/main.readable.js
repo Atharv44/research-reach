@@ -7,7 +7,7 @@ var LAB_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish%
 var LAB_GMAIL = 'https://mail.google.com/mail/?view=cm&fs=1&to=patemish%40iu.edu&su=Bringing%20my%20lab%20into%20Research%20Reach&body=Hi%2C%0A%0AI%27d%20like%20to%20bring%20my%20lab%20into%20Research%20Reach.%0A%0AName%3A%0ALab%20or%20PI%3A%0ADepartment%3A%0AWhat%20I%20look%20for%20in%20a%20student%3A%0AA%20few%20times%20that%20work%20to%20talk%3A%0A';
 var COHORT_LINE = '';
 var LAB_PROFILE_URL = '';
-var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish%40iu.edu&subject=Bringing%20Research%20Reach%20to%20my%20department&body=Hi%2C%0A%0AI%27d%20like%20to%20talk%20about%20bringing%20Research%20Reach%20to%20my%20department.%0A%0AName%3A%0ARole%3A%0ADepartment%3A%0AA%20few%20times%20that%20work%20to%20talk%3A%0A';
+var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=researchreached%40gmail.com&subject=Bringing%20Research%20Reach%20to%20my%20department&body=Hi%2C%0A%0AI%27d%20like%20to%20talk%20about%20bringing%20Research%20Reach%20to%20my%20department.%0A%0AName%3A%0ARole%3A%0ADepartment%3A%0AA%20few%20times%20that%20work%20to%20talk%3A%0A';
 
 (function () {
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -333,6 +333,13 @@ var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish
     rowsIn('.benefits', '.benefit');
     rowsIn('.facts', '.fact');
     rowsIn('.after-steps', 'li');
+    rowsIn('.journey', 'li');
+    rowsIn('.tally-grid', '.tally-item');
+    rowsIn('.gets', '.get');
+    rowsIn('.trust-grid', '.trust-item');
+    rowsIn('.doors-grid', '.door');
+    var bars = $$('.timebars .bar');
+    if (bars.length) gsap.from(bars, { scaleX: 0, duration: 1.1, ease: 'expo.out', stagger: 0.25, delay: 0.5 });
     var sample = $('.sample-card');
     if (sample) {
       var fieldRows = $$('.sample-fields div', sample);

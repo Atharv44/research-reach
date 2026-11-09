@@ -704,11 +704,136 @@ html:not(.motion) .how-static { display: block; }
   .how-cta { margin-top: 24px; }
 }
 
+/* Departments page, How it works page and shared strips */
+
+.how-cta, .how-more { margin-top: 32px; }
+.after-more { grid-column: 5 / 13; margin-top: 32px; }
+.dept-teaser .dept-trust { margin-top: 0; padding-top: 0; border-top: 0; font-size: 20px; line-height: 30px; }
+
+.versus { padding-block: 96px; }
+.versus-table { width: 100%; margin-top: 48px; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.versus-table th, .versus-table td { padding: 20px 24px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--fog); }
+.versus-table thead th { font: 600 16px/24px var(--font-text); color: var(--slate); }
+.versus-table thead td { width: 18%; }
+.versus-table tbody th { font: 700 20px/28px var(--font-display); }
+.versus-table tbody td { color: var(--slate); }
+.versus-table .versus-us { background: var(--panel-blue); color: var(--ink-navy); font-weight: 500; border-bottom-color: var(--corner-sky); }
+.versus-table thead .versus-us { border-radius: 8px 8px 0 0; color: var(--reach-blue); }
+.versus-table tbody tr:last-child .versus-us { border-radius: 0 0 8px 8px; border-bottom: 0; }
+.versus-table tbody tr:last-child th, .versus-table tbody tr:last-child td { border-bottom: 0; }
+
+.quote { padding-block: 0 96px; }
+.quote figure { margin-block: 0; padding: 48px; background: var(--pale-sky); border-radius: 8px; display: grid; gap: 24px; }
+.quote blockquote { margin: 0; font: 400 28px/38px var(--font-display); max-width: 30em; }
+.quote figcaption { display: grid; gap: 2px; }
+.quote-name { font-weight: 600; }
+.quote-role { color: var(--slate); font-size: 15px; line-height: 22px; }
+
+.how-hero .hero-copy { grid-column: 1 / 7; }
+.timebars { grid-column: 8 / 13; display: grid; gap: 32px; padding: 40px; background: var(--pale-sky); border-radius: 8px; }
+.timebar { display: grid; gap: 8px; }
+.timebar-tag { font: 600 16px/24px var(--font-text); color: var(--slate); }
+.timebar-num { font: 700 48px/54px var(--font-display); letter-spacing: -0.01em; }
+.timebar-us .timebar-num { color: var(--reach-blue); }
+.bar { display: block; height: 16px; border-radius: 8px; transform-origin: 0 50%; }
+.bar-long { width: 100%; background: var(--slate); }
+.bar-short { width: 16px; background: var(--reach-blue); }
+.timebar-note { font-size: 15px; line-height: 22px; color: var(--slate); }
+
+.journey-sec { padding-block: 32px 96px; }
+.journey { margin-top: 48px; }
+.journey li { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: center; padding-block: 40px; border-top: 1px solid var(--fog); }
+.journey-copy { grid-column: 1 / 7; display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 20px; align-items: start; }
+.journey-copy h3 { font-size: 28px; line-height: 36px; }
+.journey-copy h3 + p { margin-top: 8px; color: var(--slate); max-width: 26em; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.chip { padding: 6px 14px; border: 1px solid var(--fog); border-radius: 999px; font: 500 15px/22px var(--font-text); }
+.chip-time { background: var(--panel-blue); border-color: var(--panel-blue); font: 400 15px/22px 'IBM Plex Mono', monospace; }
+.journey-art { grid-column: 8 / 13; padding: 16px 24px; background: var(--pale-sky); border-radius: 8px; }
+.journey-art .scene { width: 100%; height: auto; }
+
+.tally { padding: 0 var(--margin) 96px; }
+.tally .color-block { max-width: calc(1200px + 128px); margin-inline: auto; padding: 80px 64px; background: var(--ink-navy); border-radius: 32px; color: var(--white); }
+.tally .h2 { color: var(--white); }
+.tally-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); margin-top: 48px; }
+.tally-item { display: grid; gap: 8px; align-content: start; }
+.tally .big { font-size: 88px; line-height: 88px; white-space: nowrap; }
+.tally .big-label { color: var(--corner-sky); }
+
+.doors { padding-block: 96px; background: var(--pale-sky); }
+.doors-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); margin-top: 48px; }
+.door { display: grid; gap: 12px; align-content: start; justify-items: start; padding: 32px; background: var(--white); border: 1px solid var(--fog); border-radius: 8px; }
+.door h3 { font-size: 24px; line-height: 32px; }
+.door > p { color: var(--slate); margin-bottom: 12px; }
+
+.dept-hero .hero-copy { grid-column: 1 / 7; }
+.dept-hero-panel { grid-column: 8 / 13; padding: 48px 40px; background: var(--ink-navy); border-radius: 8px; color: var(--white); }
+.dept-hero-panel .dept-figure .big { font-size: 60px; line-height: 64px; white-space: normal; }
+.dept-hero-panel .minis { border-top-color: rgba(133, 183, 235, .35); }
+.dept-hero-panel .minis dd { color: var(--corner-sky); }
+.gets-sec { padding-block: 96px; }
+.gets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px var(--gutter); margin-top: 48px; }
+.get { display: grid; gap: 12px; align-content: start; padding-top: 24px; border-top: 1px solid var(--fog); }
+.get h3 { font-size: 24px; line-height: 32px; margin-top: 8px; }
+.get p { color: var(--slate); }
+.rollout { padding-top: 0; }
+.trust { padding-block: 96px; background: var(--pale-sky); }
+.trust-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); margin-top: 48px; }
+.trust-item { display: grid; gap: 8px; align-content: start; padding: 32px; background: var(--white); border-radius: 8px; }
+.trust-item h3 { font-size: 22px; line-height: 30px; }
+.trust-item p { color: var(--slate); }
+.closing-plain { padding-bottom: 96px; }
+
+@media (min-width: 960px) and (max-width: 1199px) {
+  .site-nav ul { gap: 20px; }
+}
+
+@media (max-width: 1023px) {
+  .how-hero .hero-copy, .timebars, .dept-hero .hero-copy, .dept-hero-panel { grid-column: 1 / -1; }
+  .timebars, .dept-hero-panel { margin-top: 40px; }
+  .journey-copy, .journey-art { grid-column: 1 / -1; }
+  .journey-art { margin-top: 24px; max-width: 520px; }
+  .gets, .trust-grid, .doors-grid { grid-template-columns: 1fr; }
+  .tally .color-block { padding: 56px 32px; }
+  .tally .big { font-size: 64px; line-height: 68px; }
+  .after-more { grid-column: 1 / -1; }
+}
+
+@media (max-width: 767px) {
+  .versus, .gets-sec, .trust, .doors { padding-block: 64px; }
+  .journey-sec { padding-block: 16px 64px; }
+  .versus-table, .versus-table tbody, .versus-table tr, .versus-table th, .versus-table td { display: block; }
+  .versus-table thead { display: none; }
+  .versus-table { margin-top: 32px; }
+  .versus-table tbody tr { padding-block: 20px; border-top: 1px solid var(--fog); }
+  .versus-table tbody th, .versus-table tbody td { padding: 0; border: 0; }
+  .versus-table tbody td { margin-top: 12px; }
+  .versus-table tbody td::before { content: attr(data-col); display: block; font: 600 14px/20px var(--font-text); color: var(--slate); }
+  .versus-table tbody .versus-us { padding: 12px 16px; border-radius: 8px; }
+  .versus-table tbody tr:last-child .versus-us { border-radius: 8px; }
+  .versus-table tbody .versus-us::before { color: var(--reach-blue); }
+  .quote { padding-bottom: 64px; }
+  .quote figure { padding: 32px 20px; }
+  .quote blockquote { font-size: 22px; line-height: 32px; }
+  .timebars { padding: 24px 20px; }
+  .timebar-num { font-size: 40px; line-height: 44px; }
+  .journey li { padding-block: 32px; }
+  .journey-copy h3 { font-size: 24px; line-height: 32px; }
+  .tally { padding: 0 8px 64px; }
+  .tally .color-block { padding: 48px 20px; border-radius: 24px; }
+  .tally-grid { grid-template-columns: 1fr; gap: 32px; margin-top: 32px; }
+  .dept-hero-panel { padding: 32px 20px; }
+  .dept-hero-panel .dept-figure .big { font-size: 52px; line-height: 56px; }
+  .door, .trust-item { padding: 24px 20px; }
+  .closing-plain { padding-bottom: 64px; }
+}
+
 @media (max-width: 374px) {
   .pill-bar { gap: 4px; padding-left: 12px; }
-  .brand img { width: 88px; }
-  .menu-toggle { padding-inline: 4px; font-size: 15px; }
-  .header-cta { padding: 10px 12px; font-size: 14px; }
+  .brand img { width: 80px; }
+  .menu-toggle { padding-inline: 2px; font-size: 14px; }
+  .header-cta { padding: 10px 10px; font-size: 13px; }
+  .pill-bar { padding-right: 6px; }
   .strip-inner { font-size: 14px; }
 }
 
