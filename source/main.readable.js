@@ -37,6 +37,42 @@ var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
   }
 
+  // Header picks up a shadow once the page moves
+  var bar = $('.site-header');
+  if (bar) {
+    var lift = function () { bar.classList.toggle('is-scrolled', window.scrollY > 8); };
+    window.addEventListener('scroll', lift, { passive: true });
+    lift();
+  }
+
+  // FAQ: one group of questions at a time. Without JavaScript all three show
+  var faqTabs = $$('.faq-tab'), faqPanels = $$('.faq-panel');
+  if (faqTabs.length) {
+    var pickTab = function (key, focus) {
+      faqTabs.forEach(function (t) {
+        var on = t.dataset.tab === key;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on && focus) t.focus();
+      });
+      faqPanels.forEach(function (p) {
+        var on = p.id === 'faq-' + key;
+        p.hidden = !on;
+        if (on && motion && focus !== undefined) p.animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 350, easing: 'cubic-bezier(.16,1,.3,1)' });
+      });
+    };
+    var keys = faqTabs.map(function (t) { return t.dataset.tab; });
+    var asked = location.hash.slice(1);
+    pickTab(keys.indexOf(asked) > -1 ? asked : keys[0]);
+    faqTabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { pickTab(t.dataset.tab, false); });
+      t.addEventListener('keydown', function (e) {
+        var n = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? (i + 1) % keys.length : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? (i + keys.length - 1) % keys.length : -1;
+        if (n > -1) { e.preventDefault(); pickTab(keys[n], true); }
+      });
+    });
+  }
+
   // Pages always open at the top, and a section link never leaves its #name
   // in the address bar. A link from another page to a section lands once.
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -67,6 +103,7 @@ var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish
   if (!window.gsap || !window.ScrollTrigger) {
     // Without the motion library every scene keeps its finished, readable state
     root.classList.remove('js', 'motion');
+    $$('.faq-panel').forEach(function (p) { p.hidden = false; });
     window.addEventListener('load', land);
     return;
   }
@@ -335,9 +372,27 @@ var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish
     rowsIn('.after-steps', 'li');
     rowsIn('.journey', ':scope > li');
     rowsIn('.tally-grid', '.tally-item');
-    rowsIn('.gets', '.get');
     rowsIn('.trust-grid', '.trust-item');
     rowsIn('.doors-grid', '.door');
+    rowsIn('.index-list', 'li');
+    rowsIn('.ledger-stats', 'div');
+    rowsIn('.timeline', '.tl-step');
+    rowsIn('.trust-rows', '.trust-item');
+    rowsIn('.get-side', '.get');
+    rowsIn('.terms-body', '.term:nth-child(-n+2)');
+    $$('.statement-line, .ledger-title, .get-feature').forEach(function (el) {
+      if (el.getBoundingClientRect().top < window.innerHeight) return;
+      gsap.set(el, { y: 24, opacity: 0 });
+      once(el, function () { gsap.to(el, { y: 0, opacity: 1, duration: 0.9, ease: 'expo.out' }); }, 'top 88%');
+    });
+    // Numbers count up once, the first time they are seen
+    $$('[data-count]').forEach(function (el) {
+      var to = +el.dataset.count, o = { v: 0 };
+      el.textContent = '0';
+      once(el, function () {
+        gsap.to(o, { v: to, duration: to > 100 ? 1.6 : 1.1, ease: 'power2.out', onUpdate: function () { el.textContent = Math.round(o.v).toLocaleString('en-US'); } });
+      }, 'top 92%');
+    });
     var bars = $$('.timebars .bar');
     if (bars.length) gsap.from(bars, { scaleX: 0, duration: 1.1, ease: 'expo.out', stagger: 0.25, delay: 0.5 });
     var sample = $('.sample-card');

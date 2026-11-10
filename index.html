@@ -60,14 +60,14 @@
 </header>
 <main id="main">
 
-  <section class="hero" aria-labelledby="hero-title">
+  <section class="hero home-hero" aria-labelledby="hero-title">
     <div class="grid">
       <div class="hero-copy">
         <h1 class="display" id="hero-title" aria-label="Matching students with research opportunities"><span class="word" aria-hidden="true"><span style="--i:0">Matching</span></span> <span class="word" aria-hidden="true"><span style="--i:1">students</span></span> <span class="word" aria-hidden="true"><span style="--i:2">with</span></span> <span class="word" aria-hidden="true"><span style="--i:3">research</span></span> <span class="word" aria-hidden="true"><span style="--i:4">opportunities</span></span></h1>
         <p class="lead">We screen every student and introduce each lab only to the ones who fit.</p>
         <a class="text-link" href="how.html">See how it works</a>
       </div>
-      <div class="hero-visual"><svg class="hero-scene" viewBox="200 130 800 402" role="img" aria-label="The Student holds a student application and the Professor holds a lab application. Both travel into the Research Reach mark between them: the match" focusable="false">
+      <div class="hero-visual dots"><svg class="hero-scene" viewBox="200 130 800 402" role="img" aria-label="The Student holds a student application and the Professor holds a lab application. Both travel into the Research Reach mark between them: the match" focusable="false">
           <path class="trail h-trail h-trail-s" d="M366 322C430 300 500 262 548 254"/>
           <path class="trail h-trail h-trail-p" d="M834 322C770 300 700 262 652 254"/>
           <g class="h-fig" transform="translate(330 484)"><g transform="scale(0.5)" filter="url(#sticker)"><use href="#m-student-hold"/></g></g>
@@ -83,35 +83,52 @@
     </div>
   </section>
 
-  <section class="doors home-doors" aria-labelledby="doors-title">
+  <section class="index" aria-labelledby="doors-title">
     <div class="wrap">
-      <h2 class="h2" id="doors-title">Where would you like to start</h2>
-      <div class="doors-grid"><div class="door"><h3>I run a lab</h3><p>Meet only the students who fit</p><a class="button" href="faculty.html">For faculty</a></div><div class="door"><h3>I lead a department</h3><p>Give your faculty their recruiting hours back</p><a class="button" href="departments.html">For departments</a></div><div class="door"><h3>I am a student</h3><p>Find a lab without cold emailing</p><a class="button" href="students.html">For students</a></div></div>
+      <h2 class="h2 reveal" id="doors-title">Where would you like to start</h2>
+      <ol class="index-list"><li><a class="index-row" href="faculty.html"><span class="index-num" aria-hidden="true">01</span><span class="index-title">I run a lab</span><span class="index-line">Meet only the students who fit</span><span class="index-go"><span class="index-label">For faculty</span><span class="index-arrow"><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span></a></li><li><a class="index-row" href="departments.html"><span class="index-num" aria-hidden="true">02</span><span class="index-title">I lead a department</span><span class="index-line">Give your faculty their recruiting hours back</span><span class="index-go"><span class="index-label">For departments</span><span class="index-arrow"><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span></a></li><li><a class="index-row" href="students.html"><span class="index-num" aria-hidden="true">03</span><span class="index-title">I am a student</span><span class="index-line">Find a lab without cold emailing</span><span class="index-go"><span class="index-label">For students</span><span class="index-arrow"><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span></a></li></ol>
     </div>
   </section>
 
-    <div class="proof wrap home-proof">
-      <p class="proof-item"><span class="proof-num">4 labs</span><span class="proof-label">at IU Bloomington this fall 2026</span></p>
-      <p class="proof-item"><span class="proof-num">100+</span><span class="proof-label">students signed up</span></p>
+  <section class="ledger band" aria-labelledby="ledger-title">
+    <div class="grid">
+      <h2 class="ledger-title" id="ledger-title">Other tools stop at the listing. We make the match</h2>
+      <dl class="ledger-stats">
+        <div><dt><span data-count="4">4</span> labs</dt><dd>at IU Bloomington this fall 2026</dd></div>
+        <div><dt><span data-count="100">100</span>+</dt><dd>students signed up</dd></div>
+        <div><dt><span data-count="15">15</span> min</dt><dd>for a lab to join, once</dd></div>
+      </dl>
     </div>
+  </section>
+
 </main>
 <footer class="site-footer">
   <div class="site-footer-inner">
     <div class="footer-brand">
-      <img src="assets/rr-logo-reversed.svg" width="166" height="54" alt="Research Reach" loading="lazy">
+      <a href="index.html"><img src="assets/rr-logo-reversed.svg" width="166" height="54" alt="Research Reach" loading="lazy"></a>
       <p class="footer-tagline">Matching students with research opportunities</p>
       <p class="footer-company">Research Reach LLC, founded by Misha Patel and Atharv Neema. <a href="about.html">Meet the team</a></p>
     </div>
     <nav class="footer-nav" aria-label="Footer">
-      <ul>
-        <li><a href="faculty.html">For faculty</a></li>
-        <li><a href="departments.html">For departments</a></li>
-        <li><a href="students.html">For students</a></li>
-        <li><a href="how.html">How it works</a></li>
-        <li><a href="about.html">About</a></li>
-      </ul>
+      <div class="footer-col">
+        <h2 class="footer-head">Who it is for</h2>
+        <ul>
+          <li><a href="faculty.html">For faculty</a></li>
+          <li><a href="departments.html">For departments</a></li>
+          <li><a href="students.html">For students</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2 class="footer-head">Company</h2>
+        <ul>
+          <li><a href="how.html">How it works</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="terms.html">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
     </nav>
-    <p class="footer-line"><span>2026 Research Reach LLC</span><span>An independent company, not an Indiana University office</span></p>
+    <p class="footer-line"><span>2026 Research Reach LLC</span></p>
   </div>
 </footer>
 </body>
