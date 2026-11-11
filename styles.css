@@ -1097,3 +1097,38 @@ html:not(.js) .faq-panels { grid-column: 1 / -1; }
 
 @media (max-width: 1023px) { .dots::before { inset: 0; } .doc-hero .dots::before { inset: 0 0 0 30%; } }
 @media (min-width: 1024px) { .about-why-inner > .h2 + * { margin-top: 0; } }
+
+/* Version 5 additions */
+
+/* Faculty and departments: single-line compare link that replaces the versus table */
+.compare-strip { padding-block: var(--s-32); }
+.compare-link { margin: 0; }
+.compare-link .text-link { font: 500 18px/28px var(--font-text); }
+
+/* Departments: math line under the 3,000 hours */
+.dept-math { margin-top: var(--s-16); color: var(--corner-sky); font: 400 15px/24px 'IBM Plex Mono', monospace; letter-spacing: .02em; }
+
+/* How page: time ribbon in the hero, 3 stacked rows */
+.how-ribbon { grid-column: 8 / 13; align-self: start; display: grid; gap: 0; padding: var(--s-32); background: var(--pale-sky); border-radius: 8px; }
+.how-ribbon p { display: grid; grid-template-columns: 136px minmax(0, 1fr); align-items: baseline; padding-block: var(--s-16); border-top: 1px solid var(--fog); margin: 0; }
+.how-ribbon p:first-child { border-top: 0; padding-top: 0; }
+.how-ribbon p:last-child { padding-bottom: 0; }
+.ribbon-num { font: 700 32px/40px var(--font-display); letter-spacing: -0.01em; }
+.ribbon-tag { color: var(--slate); font-size: 16px; line-height: 24px; }
+
+/* How page: keep-reading row at the bottom, three text links instead of three door cards */
+.where-next { padding-block: var(--section); background: var(--pale-sky); }
+.where-links { margin-top: var(--s-32); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--s-16); border-top: 1px solid var(--fog); }
+.where-links li { padding-top: var(--s-24); }
+.where-links .text-link { display: inline-flex; align-items: center; gap: var(--s-8); font: 700 20px/28px var(--font-display); letter-spacing: -0.01em; }
+.where-links .arrow { width: 18px; height: 18px; color: var(--reach-blue); transition: transform .35s var(--ease); }
+.where-links .text-link:hover .arrow { transform: translateX(4px); }
+
+@media (max-width: 1023px) {
+  .how-ribbon { grid-column: 1 / -1; margin-top: var(--s-32); }
+  .where-links { grid-template-columns: 1fr; }
+}
+@media (max-width: 767px) {
+  .how-ribbon p { grid-template-columns: 104px minmax(0, 1fr); }
+  .ribbon-num { font-size: 26px; line-height: 32px; }
+}
