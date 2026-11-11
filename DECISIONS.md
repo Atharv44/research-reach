@@ -235,3 +235,12 @@ Defaults logged where the brief left room
 - FAQ page is the only full home for Q and A. Each landing page lists only questions not already answered above.
 - The versus listings table runs only on how.html. Faculty and departments carry a one line text link.
 - "About 60 hours" lives only on faculty.html. Departments names 60 hours only as the math under 3,000 hours.
+
+## Brand type change (11/11/2026)
+- Headings now set in Gambarino, body in Supreme. Both are Fontshare fonts under the ITF Free Font License, self hosted in assets/fonts with the license file alongside.
+- Supreme loads as one variable file (weights 100 to 800), so the existing 400, 500 and 600 text weights all hold.
+- Gambarino ships a single Regular weight. Every display declaration that asked for 700 now asks for 400, so the CSS matches what renders. font-synthesis stays off, so no browser fakes a bold.
+- Georgia and Arial stay as fallbacks. Gelasio and IBM Plex Sans no longer load. IBM Plex Mono stays on Google Fonts for the numbers, dates and counters.
+- Headings carry extra weight through a text stroke sized at 0.03em, set once in --display-stroke, so they read bold even though Gambarino has no Bold file. It applies only to the type that was bold before (headings, stat numbers, FAQ tabs, index titles), so quotes and display body lines stay regular.
+- The top menu links (For faculty, For departments, For students, How it works, About) now use the heading face at 18px with the same stroke, 20px in the phone menu. Link spacing drops to 16px between 1100px and 1199px wide so About clears the button. The Find me a student button and the footer stay in Supreme.
+- Both woff2 files are preloaded on every page and the stylesheet version moved to 1111i to clear cached CSS.
