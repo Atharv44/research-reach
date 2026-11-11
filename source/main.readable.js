@@ -1,4 +1,4 @@
-// Research Reach: sign up routing, menu, section links and every scene
+// Research Reach: sign up routing, section links, booking and every scene
 
 var STUDENT_FORM_URL = 'https://forms.gle/aK2CJZSYnAAkVHnM9';
 var LAB_EMAIL = 'patemish@iu.edu';
@@ -8,6 +8,10 @@ var LAB_GMAIL = 'https://mail.google.com/mail/?view=cm&fs=1&to=patemish%40iu.edu
 var COHORT_LINE = '';
 var LAB_PROFILE_URL = '';
 var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish%40iu.edu&subject=Bringing%20Research%20Reach%20to%20my%20department&body=Hi%2C%0A%0AI%27d%20like%20to%20talk%20about%20bringing%20Research%20Reach%20to%20my%20department.%0A%0AName%3A%0ARole%3A%0ADepartment%3A%0AA%20few%20times%20that%20work%20to%20talk%3A%0A';
+
+// Paste values to turn these on. Empty means off and nothing loads.
+var CLARITY_ID = '';
+var CAL_LINK = '';
 
 (function () {
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -28,14 +32,117 @@ var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish
   var cohort = $('.cohort-line');
   if (cohort && COHORT_LINE) { cohort.textContent = COHORT_LINE; cohort.hidden = false; }
 
-  // Menu
-  var toggle = $('.menu-toggle'), nav = $('#site-nav');
-  if (toggle && nav) {
-    var setMenu = function (open) { toggle.setAttribute('aria-expanded', String(open)); nav.classList.toggle('is-open', open); };
-    toggle.addEventListener('click', function () { setMenu(toggle.getAttribute('aria-expanded') !== 'true'); });
-    $$('a', nav).forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+  // Microsoft Clarity. Loads only when CLARITY_ID is set
+  if (CLARITY_ID) {
+    (function (c, l, a, r, i) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      var t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+      var y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CLARITY_ID);
+    var aud = (document.body.getAttribute('data-audience') || 'home');
+    window.clarity('set', 'audience', aud);
+    $$('[data-cta]').forEach(function (el) {
+      el.addEventListener('click', function () { window.clarity('event', 'cta-' + el.getAttribute('data-cta')); });
+    });
   }
+
+  // cal.com booking. The booking band and the about.html section ship only when CAL_LINK is set.
+  // Buttons open the booking page in a dialog: focus stays inside, Escape closes it and focus returns to the button
+  if (CAL_LINK) {
+    var calUrl = 'https://cal.com/' + CAL_LINK + '?embed=true&theme=light';
+    var track = function (name) { if (window.clarity) window.clarity('event', name); };
+    var openCal = function (opener) {
+      var pop = document.createElement('div');
+      pop.className = 'cal-pop';
+      pop.setAttribute('role', 'dialog');
+      pop.setAttribute('aria-modal', 'true');
+      pop.setAttribute('aria-label', 'Book a call with our team');
+      pop.innerHTML = '<div class="cal-pop-box"><div class="cal-pop-bar"><button class="q-btn cal-close" type="button">Close</button></div>' +
+        '<iframe title="Booking calendar" src="' + calUrl + '"></iframe></div>';
+      document.body.appendChild(pop);
+      var closeBtn = $('.cal-close', pop), frame = $('iframe', pop);
+      var lastOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      var close = function () {
+        document.removeEventListener('keydown', onKey, true);
+        document.removeEventListener('focusin', onFocus, true);
+        pop.remove();
+        document.body.style.overflow = lastOverflow;
+        if (opener) opener.focus();
+      };
+      var onKey = function (e) {
+        if (e.key === 'Escape') { e.preventDefault(); close(); }
+        else if (e.key === 'Tab') {
+          var on = document.activeElement;
+          if (e.shiftKey && on === closeBtn) { e.preventDefault(); frame.focus(); }
+          else if (!e.shiftKey && on === frame) { e.preventDefault(); closeBtn.focus(); }
+        }
+      };
+      var onFocus = function (e) { if (!pop.contains(e.target)) closeBtn.focus(); };
+      document.addEventListener('keydown', onKey, true);
+      document.addEventListener('focusin', onFocus, true);
+      closeBtn.addEventListener('click', close);
+      pop.addEventListener('click', function (e) { if (e.target === pop) close(); });
+      closeBtn.focus();
+      track('cal-open');
+    };
+    $$('[data-cta="book-call"]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.preventDefault(); openCal(btn); });
+    });
+    // about.html: the inline calendar loads only when the section comes near the screen
+    var embed = $('#cal-embed');
+    if (embed && 'IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) return;
+        io.disconnect();
+        var f = document.createElement('iframe');
+        f.title = 'Booking calendar';
+        f.src = calUrl;
+        f.loading = 'lazy';
+        embed.innerHTML = '';
+        embed.appendChild(f);
+        track('cal-open-inline');
+      }, { rootMargin: '300px 0px' });
+      io.observe(embed);
+    }
+  }
+
+  // Quotes: one at a time with Previous and Next, swipe on touch, no auto advance.
+  // Without JavaScript or with reduced motion every quote shows, stacked
+  $$('.q-slider').forEach(function (box) {
+    var items = $$('.q-item', box);
+    if (items.length < 2 || !motion) return;
+    var at = 0;
+    var show = function (n) {
+      at = (n + items.length) % items.length;
+      items.forEach(function (it, i) { it.classList.toggle('is-active', i === at); });
+    };
+    box.classList.add('is-slider');
+    show(0);
+    $('.q-prev', box).addEventListener('click', function () { show(at - 1); });
+    $('.q-next', box).addEventListener('click', function () { show(at + 1); });
+    var x0 = null;
+    box.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
+    box.addEventListener('pointerup', function (e) {
+      if (x0 === null) return;
+      var dx = e.clientX - x0; x0 = null;
+      if (Math.abs(dx) > 48) show(at + (dx < 0 ? 1 : -1));
+    });
+  });
+
+  // how.html: the timeline line ends at the last step's marker
+  var tlWrap = $('.tl-wrap');
+  var fitLine = function () {
+    if (!tlWrap) return;
+    var nodes = $$('.tl-node', tlWrap);
+    if (!nodes.length) return;
+    var top = tlWrap.getBoundingClientRect().top;
+    var first = nodes[0].getBoundingClientRect(), last = nodes[nodes.length - 1].getBoundingClientRect();
+    var y0 = first.top + first.height / 2 - top, y1 = last.top + last.height / 2 - top;
+    $$('.tl-track, .tl-fill', tlWrap).forEach(function (el) { el.style.top = y0 + 'px'; el.style.bottom = 'auto'; el.style.height = (y1 - y0) + 'px'; });
+  };
+  fitLine();
+  window.addEventListener('resize', fitLine);
 
   // Header picks up a shadow once the page moves
   var bar = $('.site-header');
@@ -58,12 +165,14 @@ var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish
       faqPanels.forEach(function (p) {
         var on = p.id === 'faq-' + key;
         p.hidden = !on;
+        p.classList.toggle('is-shown', on);
         if (on && motion && focus !== undefined) p.animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 350, easing: 'cubic-bezier(.16,1,.3,1)' });
       });
     };
     var keys = faqTabs.map(function (t) { return t.dataset.tab; });
     var asked = location.hash.slice(1);
     pickTab(keys.indexOf(asked) > -1 ? asked : keys[0]);
+    $('.faq-panels').classList.add('is-ready');
     faqTabs.forEach(function (t, i) {
       t.addEventListener('click', function () { pickTab(t.dataset.tab, false); });
       t.addEventListener('keydown', function (e) {
@@ -81,7 +190,10 @@ var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish
   if (!arrival) { cleanUrl(); window.scrollTo(0, 0); }
 
   var pins = {};
-  var headerSpace = function () { return window.innerWidth < 600 ? 80 : 96; };
+  var headerSpace = function () {
+    var h = $('.site-header');
+    return h && getComputedStyle(h).position === 'sticky' ? h.offsetHeight + 32 : 24;
+  };
   var topOf = function (el) {
     return Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - headerSpace()));
   };
@@ -104,7 +216,7 @@ var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish
     // Without the motion library every scene keeps its finished, readable state
     root.classList.remove('js', 'motion');
     $$('.faq-panel').forEach(function (p) { p.hidden = false; });
-    window.addEventListener('load', land);
+    window.addEventListener('load', function () { fitLine(); land(); });
     return;
   }
   gsap.registerPlugin(ScrollTrigger);
@@ -328,7 +440,9 @@ var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish
 
   if (motion) {
     $$('.read').forEach(function (p) {
-      gsap.fromTo(p, { opacity: 0.18 }, { opacity: 1, ease: 'none', scrollTrigger: { trigger: p, start: 'top 88%', end: 'top 58%', scrub: true } });
+      if (p.getBoundingClientRect().top < window.innerHeight) return;
+      gsap.set(p, { y: 16, opacity: 0 });
+      once(p, function () { gsap.to(p, { y: 0, opacity: 1, duration: 0.8, ease: 'expo.out' }); }, 'top 88%');
     });
     $$('.founder').forEach(function (f) {
       var shutter = $('.founder-shutter', f), facts = $$('.founder-text > *, .founder-facts div', f);
@@ -367,10 +481,28 @@ var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish
       });
     };
     rowsIn('.compare', '.compare-panel');
-    rowsIn('.benefits', '.benefit');
+    rowsIn('.benefit-grid', '.benefit');
+    rowsIn('.how-inline-steps', 'li');
     rowsIn('.facts', '.fact');
     rowsIn('.after-steps', 'li');
-    rowsIn('.journey', ':scope > li');
+    if (tlWrap) {
+      var fill = $('.tl-fill', tlWrap);
+      gsap.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: tlWrap, start: 'top 65%', end: 'bottom 65%', scrub: 0.6 } });
+      $$('.tl-row', tlWrap).forEach(function (row) {
+        var node = $('.tl-node', row), mid = $('.tl-mid', row), st = $('.tl-student', row), lab = $('.tl-lab', row);
+        var wide = window.matchMedia('(min-width: 960px)').matches;
+        gsap.set(node, { scale: 0.4, opacity: 0 });
+        gsap.set(mid, { y: 24, opacity: 0 });
+        gsap.set(st, { x: wide ? -32 : 0, y: wide ? 0 : 24, opacity: 0 });
+        gsap.set(lab, { x: wide ? 32 : 0, y: wide ? 0 : 24, opacity: 0 });
+        once(row, function () {
+          gsap.timeline({ defaults: { ease: 'expo.out' } })
+            .to(node, { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.8)' }, 0)
+            .to(mid, { y: 0, opacity: 1, duration: 0.7 }, 0.1)
+            .to([st, lab], { x: 0, y: 0, opacity: 1, duration: 0.8, stagger: 0.08 }, 0.2);
+        }, 'top 72%');
+      });
+    }
     rowsIn('.tally-grid', '.tally-item');
     rowsIn('.trust-grid', '.trust-item');
     rowsIn('.doors-grid', '.door');
@@ -409,7 +541,7 @@ var DEPT_OUTLOOK = 'https://outlook.office.com/mail/deeplink/compose?to=patemish
     if (studentFig) gsap.from(studentFig, { y: '+=40', opacity: 0, duration: 0.9, ease: 'expo.out', delay: 0.25 });
   }
 
-  var settle = function () { ScrollTrigger.refresh(); land(); };
+  var settle = function () { fitLine(); ScrollTrigger.refresh(); land(); };
   if (document.readyState === 'complete') settle();
   else window.addEventListener('load', settle);
 })();

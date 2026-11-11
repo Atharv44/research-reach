@@ -244,3 +244,39 @@ Defaults logged where the brief left room
 - Headings carry extra weight through a text stroke sized at 0.03em, set once in --display-stroke, so they read bold even though Gambarino has no Bold file. It applies only to the type that was bold before (headings, stat numbers, FAQ tabs, index titles), so quotes and display body lines stay regular.
 - The top menu links (For faculty, For departments, For students, How it works, About) now use the heading face at 18px with the same stroke, 20px in the phone menu. Link spacing drops to 16px between 1100px and 1199px wide so About clears the button. The Find me a student button and the footer stay in Supreme.
 - Both woff2 files are preloaded on every page and the stylesheet version moved to 1111i to clear cached CSS.
+
+## Version 6, reference not pitch (11/11/2026)
+Type
+- Boska sets display and Nippo sets text, chosen by Atharv at Gate 1. This replaces the Gambarino and Supreme change above and the type section of brand guide v1. The Gambarino and Supreme files are deleted.
+- Both fonts are self hosted in assets/fonts with font-display swap. boska-700 and nippo-400 are preloaded. Tuned fallback faces (Times New Roman and Arial with size-adjust) keep text from jumping while fonts load.
+- No Georgia, Gelasio, IBM Plex or Sometype anywhere on the site. Nippo has no tabular figures, so counters and dates use Boska with tabular lining numerals.
+
+Header
+- No Menu button at any width. The 5 links always show and drop to a second row of the bar when the row would collide. Text never goes under 14px.
+- The header button sits 12px from the bar's top, right and bottom, and 12px from the links when they share its row.
+- Below 1100px the header scrolls with the page instead of staying pinned. At 374px and under the logo shows as the mark only.
+
+Pages
+- Section headings are short labels. H1s and closings are actions. The VERSUS table is titled "Why we are better", names no competitor, and runs on faculty, departments and how.html.
+- Faculty: inline How it works in 3 steps, each naming who, what and how long.
+- Departments: 3 benefits replace "How a department starts". Fair access for students follows, then the comparison and Private by design. The quote slider is built and held out until 2 approved quotes are supplied (QUOTES in build_site.py).
+- Students: the odds band is gone. "What you submit" lists the fields from the live student form (11/11 copy). The privacy line matches the form: only our team sees a profile, and a lab sees it only with the student's approval.
+- how.html: a 3 lane timeline, student left, lab right, our team down the middle, one column on phones. The line draws with the scroll and steps come in as it reaches them, transform and opacity only, no pinning. Reduced motion and no JavaScript show it complete. The repeated 15, 5 and 1 tally block is removed.
+- The nine factors now match the form: major and minor, class standing, courses taken, GPA if shared, hours a week, days and terms free, paid or credit, lab experience, research interests.
+- About: "What we hold to" becomes "Our mission".
+- Questions render closed by default. Opening them by script after load caused a 0.12 layout shift on faq.html.
+- Check-ins at match and one month later stay off the site, per Atharv.
+- Every student button still points to the current form link, per Atharv, even while that form is closed.
+
+SEO
+- Unique titles under 60 characters and descriptions of 140 to 160. Canonical links point to researchreached.com. sitemap.xml and robots.txt ship at the root. Organization data on the home page and FAQPage data on faq.html.
+
+Analytics and booking (both off until set)
+- CLARITY_ID and CAL_LINK sit at the top of build_site.py and are written into main.js at build. Empty means no tag, no band and no request to either service.
+- With CLARITY_ID set: the tag loads, each page sets its audience, every data-cta click and every booking open sends an event, and the Clarity sentence is added to Terms section 6, per Atharv. Dashboard: masking Strict, exclude Atharv's IP, add both domains.
+- With CAL_LINK set: a booking band sits above every footer, the About page gets a calendar that loads near the screen, and chairs see "Book a call" in place of "Talk to our team", per Atharv. The popup traps focus, closes on Escape and returns focus. Without JavaScript each button is a plain link.
+
+Still open
+- 2 approved quotes for the departments slider.
+- Approval of the Fair access and mission wording.
+- From the fresh eyes review: a company address behind the buttons, a real faculty form, a source or estimate label on the 3,000 and 60 hour figures, student wait time and what happens when no lab fits.
