@@ -11,8 +11,8 @@
   --slate: #5A5A6E;
   --fog: #C9D1DC;
 
-  --font-display: 'Boska', 'Boska Fallback', serif;
-  --font-text: 'Nippo', 'Nippo Fallback', sans-serif;
+  --font-display: 'Switzer', 'Switzer Fallback', sans-serif;
+  --font-text: 'Supreme', 'Supreme Fallback', sans-serif;
 
   --margin: 64px;
   --gutter: 24px;
@@ -1139,16 +1139,15 @@ html:not(.js) .faq-panels { grid-column: 1 / -1; }
 
 /* ===== Version 6 ===== */
 
-/* Type. Boska sets display, Nippo sets text. Both are served from assets/fonts.
-   The fallback faces are tuned to each font's width and height so the page does not jump when they load */
-@font-face { font-family: 'Boska'; src: url('assets/fonts/boska-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: 'Boska'; src: url('assets/fonts/boska-700.woff2') format('woff2'); font-weight: 500 700; font-style: normal; font-display: swap; }
-@font-face { font-family: 'Nippo'; src: url('assets/fonts/nippo-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: 'Nippo'; src: url('assets/fonts/nippo-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
-@font-face { font-family: 'Nippo'; src: url('assets/fonts/nippo-700.woff2') format('woff2'); font-weight: 600 700; font-style: normal; font-display: swap; }
-@font-face { font-family: 'Boska Fallback'; src: local('Times New Roman'), local('TimesNewRomanPSMT'), local('Liberation Serif'); size-adjust: 99.8%; ascent-override: 96.2%; descent-override: 25%; line-gap-override: 0%; }
-@font-face { font-family: 'Nippo Fallback'; src: local('Arial'), local('ArialMT'), local('Liberation Sans'); size-adjust: 102.5%; ascent-override: 96.6%; descent-override: 26.3%; line-gap-override: 0%; }
-:root { --font-display: 'Boska', 'Boska Fallback', serif; --font-text: 'Nippo', 'Nippo Fallback', sans-serif; }
+/* Type. Switzer sets titles and headings, Supreme sets body text. Both are served from assets/fonts.
+   Headings use Switzer Semibold. The fallback faces are tuned to each font's width and height so the page does not jump while fonts load */
+@font-face { font-family: 'Switzer'; src: url('assets/fonts/switzer-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('assets/fonts/switzer-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('assets/fonts/switzer-600.woff2') format('woff2'); font-weight: 600 800; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Supreme'; src: url('assets/fonts/supreme-variable.woff2') format('woff2'); font-weight: 100 800; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer Fallback'; src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'); size-adjust: 95.8%; ascent-override: 102.3%; descent-override: 26.1%; line-gap-override: 0%; }
+@font-face { font-family: 'Supreme Fallback'; src: local('Arial'), local('ArialMT'), local('Liberation Sans'); size-adjust: 108.8%; ascent-override: 90.1%; descent-override: 25.7%; line-gap-override: 0%; }
+:root { --font-display: 'Switzer', 'Switzer Fallback', sans-serif; --font-text: 'Supreme', 'Supreme Fallback', sans-serif; }
 body { font-family: var(--font-text); font-synthesis: none; }
 em, i, cite, dfn, address, var, blockquote { font-style: normal; }
 .big, .proof-num, .ribbon-num, .ledger-stats dt, .dept-figure .big, .tally-item .big { font-variant-numeric: lining-nums tabular-nums; }
@@ -1284,3 +1283,49 @@ em, i, cite, dfn, address, var, blockquote { font-style: normal; }
 
 /* Comparison: column heads sit over their text */
 .versus-table thead th { text-align: left; }
+
+/* ===== Version 7: header ===== */
+/* The button keeps one width on every page so the links never move when you switch pages.
+   Under 1100 px the links fold into a dropdown behind a Menu button, so the bar stays one slim row */
+.site-header { position: sticky; top: 12px; }
+:root { --header-space: 24px; }
+.pill-bar { position: relative; flex-wrap: nowrap; }
+.header-cta { min-width: 236px; }
+.menu-btn { display: none; }
+.nav-cta { display: none; }
+@media (min-width: 1100px) {
+  .site-nav { display: block; }
+}
+@media (max-width: 1099px) {
+  .pill-bar { border-radius: 28px; column-gap: 8px; }
+  .header-cta { order: 2; margin-left: auto; min-width: 236px; }
+  .menu-btn { order: 3; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid var(--fog); border-radius: 999px; background: var(--white); color: var(--ink-navy); font: 600 15px/1 var(--font-text); cursor: pointer; }
+  .menu-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+  .menu-btn path { transition: transform .3s var(--ease); transform-origin: 12px 12px; }
+  .menu-btn[aria-expanded="true"] .mb-a { transform: translateY(4px) rotate(45deg); }
+  .menu-btn[aria-expanded="true"] .mb-b { transform: translateY(-4px) rotate(-45deg); }
+  .js .site-nav { position: absolute; left: 0; right: 0; top: calc(100% + 8px); order: 4; padding: 8px; background: var(--white); border: 1px solid var(--fog); border-radius: 20px; box-shadow: 0 18px 40px rgba(26, 26, 46, .12); visibility: hidden; opacity: 0; transform: translateY(-6px); transition: opacity .2s ease, transform .2s ease, visibility 0s linear .2s; }
+  .js .pill-bar.is-open .site-nav { visibility: visible; opacity: 1; transform: none; transition: opacity .2s ease, transform .2s ease; }
+  .js .site-nav ul { display: grid; gap: 0; justify-content: stretch; }
+  .js .site-nav a { min-height: 52px; padding: 0 16px; border-radius: 12px; font-size: 17px; }
+  .js .site-nav a::after { display: none; }
+  .js .site-nav a[aria-current="page"] { background: var(--pale-sky); color: var(--reach-blue); }
+  .js .site-nav a:hover { background: var(--pale-sky); }
+  .no-js-wrap, html:not(.js) .site-nav { flex: 1 1 100%; order: 4; }
+  html:not(.js) .pill-bar { flex-wrap: wrap; }
+  html:not(.js) .menu-btn { display: none; }
+}
+@media (max-width: 599px) {
+  .header-cta { display: none; }
+  .menu-btn { margin-left: auto; }
+  .js .nav-cta { display: block; padding: 8px 8px 4px; }
+  .js .nav-cta .button { width: 100%; justify-content: center; }
+  .brand img { width: 112px; }
+}
+@media (max-width: 374px) { .brand img { width: 40px; height: 40px; } }
+@media (prefers-reduced-motion: reduce) { .js .site-nav, .menu-btn path { transition: none; } }
+
+/* ===== Version 7: type ===== */
+.display, .h2, .closing-title, .ledger-title, .h3, h3, h4, .big, .book-line, .student-sub, .mission { letter-spacing: -0.015em; }
+.display { letter-spacing: -0.025em; }
+@media (max-width: 599px) { .js .site-nav .nav-cta a.button { color: var(--white); font: 600 16px/16px var(--font-text); min-height: 48px; } .js .site-nav .nav-cta a.button:hover { background: var(--ink-navy); } }

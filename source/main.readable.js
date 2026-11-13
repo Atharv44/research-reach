@@ -46,6 +46,23 @@ var CAL_LINK = '';
     });
   }
 
+  // Menu under 1100 px: one button opens the five links. Escape, a link or a tap outside closes it
+  var bar = $('.pill-bar'), menuBtn = $('.menu-btn');
+  if (bar && menuBtn) {
+    var setMenu = function (open, focusBack) {
+      bar.classList.toggle('is-open', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+      $('.menu-label', menuBtn).textContent = open ? 'Close' : 'Menu';
+      if (open) { var first = $('.site-nav a', bar); if (first) first.focus(); }
+      else if (focusBack) menuBtn.focus();
+    };
+    menuBtn.addEventListener('click', function () { setMenu(!bar.classList.contains('is-open')); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bar.classList.contains('is-open')) setMenu(false, true); });
+    document.addEventListener('click', function (e) { if (bar.classList.contains('is-open') && !bar.contains(e.target)) setMenu(false); });
+    $$('.site-nav a', bar).forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+    window.matchMedia('(min-width: 1100px)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
+  }
+
   // cal.com booking. The booking band and the about.html section ship only when CAL_LINK is set.
   // Buttons open the booking page in a dialog: focus stays inside, Escape closes it and focus returns to the button
   if (CAL_LINK) {
@@ -145,9 +162,9 @@ var CAL_LINK = '';
   window.addEventListener('resize', fitLine);
 
   // Header picks up a shadow once the page moves
-  var bar = $('.site-header');
-  if (bar) {
-    var lift = function () { bar.classList.toggle('is-scrolled', window.scrollY > 8); };
+  var siteHeader = $('.site-header');
+  if (siteHeader) {
+    var lift = function () { siteHeader.classList.toggle('is-scrolled', window.scrollY > 8); };
     window.addEventListener('scroll', lift, { passive: true });
     lift();
   }
