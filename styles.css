@@ -1215,45 +1215,49 @@ em, i, cite, dfn, address, var, blockquote { font-style: normal; }
 .cal-pop-bar { display: flex; justify-content: flex-end; padding: 8px; border-bottom: 1px solid var(--fog); }
 .cal-pop iframe { flex: 1; width: 100%; border: 0; }
 
-/* how.html: one match, three lanes. The student on the left, the lab on the right, our team down the middle */
+/* how.html: one match on one grid. Student column, our column, lab column.
+   Every row uses the same 3 columns as the header above it, so all edges line up */
 .tl-sec { padding-block: var(--section) 0; }
-.tl-intro { max-width: 56ch; margin: var(--s-16) 0 0; color: var(--slate); }
-.tl-wrap { --mid: 300px; position: relative; margin-top: var(--s-32); }
-.tl { list-style: none; margin: 0; padding: 0; }
-.tl-head { --mid: 300px; display: grid; grid-template-columns: 1fr var(--mid) 1fr; column-gap: var(--s-48); margin: var(--s-48) 0 0; }
-.tl-head p { margin: 0; display: flex; align-items: center; gap: var(--s-8); font: 700 15px/22px var(--font-text); color: var(--ink-navy); }
-.tl-head p:nth-child(1) { justify-content: flex-end; }
+.tl-sec .wrap { --mid: 280px; --gap: 40px; }
+.tl-head, .tl-row { display: grid; grid-template-columns: minmax(0, 1fr) var(--mid) minmax(0, 1fr); column-gap: var(--gap); }
+.tl-head { margin: var(--s-48) 0 var(--s-24); align-items: center; }
+.tl-head p { margin: 0; display: flex; align-items: center; gap: 10px; font: 600 15px/22px var(--font-text); color: var(--ink-navy); }
 .tl-head p:nth-child(2) { justify-content: center; color: var(--reach-blue); }
-.tl-head svg, .tl-head img { width: 32px; height: 32px; }
-.tl-track, .tl-fill { position: absolute; top: 56px; bottom: 32px; left: 50%; width: 2px; margin-left: -1px; border-radius: 2px; }
+.tl-head p:nth-child(3) { justify-content: flex-start; }
+.tl-head svg, .tl-head img { width: 32px; height: 32px; flex: none; }
+.tl-wrap { position: relative; }
+.tl { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-48); }
+.tl-track, .tl-fill { position: absolute; left: 50%; width: 2px; margin-left: -1px; top: 0; height: 100%; border-radius: 2px; }
 .tl-track { background: var(--panel-blue); }
 .tl-fill { background: var(--reach-blue); transform-origin: 50% 0; }
-.tl-row { position: relative; display: grid; grid-template-columns: 1fr var(--mid) 1fr; grid-template-areas: 'student node lab' 'student mid lab'; column-gap: var(--s-48); align-items: center; padding-block: var(--s-32); }
-.tl-row + .tl-row { border-top: 0; }
-.tl-node { grid-area: node; justify-self: center; position: relative; z-index: 1; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--reach-blue); color: var(--white); font: 700 20px/1 var(--font-display); box-shadow: 0 0 0 8px var(--white); }
-.tl-mid { grid-area: mid; position: relative; z-index: 1; margin-top: var(--s-16); padding: var(--s-24); background: var(--ink-navy); color: var(--white); border-radius: 16px; text-align: center; }
-.tl-mid h3 { margin: 0; font: 700 22px/28px var(--font-display); color: var(--white); }
-.tl-mid p { margin: 8px 0 0; font-size: 16px; line-height: 24px; color: var(--panel-blue); }
-.tl-mid .factors { margin-top: var(--s-16); padding-top: var(--s-16); border-top: 1px solid rgba(255, 255, 255, .18); text-align: left; }
-.tl-mid .factors-tag { margin: 0 0 var(--s-8); font: 600 13px/18px var(--font-text); color: var(--corner-sky); }
-.tl-mid .factors ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.tl-mid .factors li { padding: 3px 10px; border: 1px solid rgba(255, 255, 255, .24); border-radius: 999px; font: 500 13px/20px var(--font-text); color: var(--white); }
-.tl-side { position: relative; padding: var(--s-24); background: var(--white); border: 1px solid var(--fog); border-radius: 16px; }
-.tl-student { grid-area: student; }
-.tl-lab { grid-area: lab; }
-.tl-side::after { content: ''; position: absolute; top: 50%; width: var(--s-48); height: 1px; background: var(--fog); }
+.tl-row { position: relative; align-items: stretch; }
+.tl-row > * { min-width: 0; }
+.tl-student { grid-column: 1; grid-row: 1; }
+.tl-mid { grid-column: 2; grid-row: 1; }
+.tl-lab { grid-column: 3; grid-row: 1; }
+.tl-node { grid-column: 2; grid-row: 1; justify-self: center; align-self: start; z-index: 2; display: grid; place-items: center; width: 40px; height: 40px; margin-top: -20px; border-radius: 50%; background: var(--reach-blue); color: var(--white); font: 700 17px/1 var(--font-display); box-shadow: 0 0 0 6px var(--white); }
+.tl-mid { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; padding: 36px 24px 24px; background: var(--ink-navy); color: var(--white); border-radius: 16px; text-align: center; }
+.tl-mid h3 { margin: 0; font: 600 20px/26px var(--font-display); color: var(--white); }
+.tl-mid p { margin: 6px 0 0; font-size: 15px; line-height: 22px; color: var(--panel-blue); }
+.tl-side { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 24px; background: var(--white); border: 1px solid var(--fog); border-radius: 16px; }
+.tl-side::after { content: ''; position: absolute; top: 50%; width: var(--gap); height: 2px; margin-top: -1px; background: var(--panel-blue); }
 .tl-student::after { left: 100%; }
 .tl-lab::after { right: 100%; }
-.tl-who { display: none; margin: 0 0 var(--s-8); font: 700 13px/18px var(--font-text); color: var(--reach-blue); }
-.tl-side h4 { margin: 0; font: 700 20px/26px var(--font-display); color: var(--ink-navy); }
-.tl-side p { margin: 8px 0 0; font-size: 16px; line-height: 24px; color: var(--slate); }
-.tl-time { display: inline-block; margin-top: var(--s-16); padding: 2px 10px; border-radius: 999px; background: var(--pale-sky); font: 600 13px/20px var(--font-text); color: var(--ink-navy); font-variant-numeric: lining-nums tabular-nums; }
-@media (max-width: 959px) {
+.tl-who { display: none; margin: 0 0 6px; font: 600 13px/18px var(--font-text); color: var(--reach-blue); }
+.tl-side h4 { margin: 0; font: 600 18px/24px var(--font-display); color: var(--ink-navy); }
+.tl-side p { margin: 6px 0 0; font-size: 15px; line-height: 22px; color: var(--slate); }
+.tl-time { align-self: flex-start; margin-top: 12px; padding: 2px 10px; border-radius: 999px; background: var(--pale-sky); font: 600 13px/20px var(--font-text); color: var(--ink-navy); font-variant-numeric: lining-nums tabular-nums; }
+@media (max-width: 1099px) { .tl-sec .wrap { --mid: 220px; --gap: 24px; } .tl-side { padding: 20px; } .tl-mid { padding: 32px 18px 20px; } }
+@media (max-width: 767px) {
   .tl-head { display: none; }
-  .tl-wrap { margin-top: var(--s-32); }
-  .tl-track, .tl-fill { left: 23px; margin-left: 0; top: 48px; bottom: 48px; }
-  .tl-row { grid-template-columns: 48px minmax(0, 1fr); grid-template-areas: 'node mid' '. student' '. lab'; column-gap: var(--s-16); row-gap: var(--s-16); align-items: start; padding-block: var(--s-24); }
-  .tl-mid { margin-top: 0; text-align: left; }
+  .tl { gap: var(--s-32); }
+  .tl-track, .tl-fill { left: 19px; margin-left: 0; }
+  .tl-row { grid-template-columns: 40px minmax(0, 1fr); column-gap: 16px; row-gap: 12px; }
+  .tl-node { grid-column: 1; grid-row: 1; align-self: start; margin-top: 0; box-shadow: 0 0 0 6px var(--white); }
+  .tl-mid { grid-column: 2; grid-row: 1; padding: 20px; text-align: left; }
+  .tl-student { grid-column: 2; grid-row: 2; }
+  .tl-lab { grid-column: 2; grid-row: 3; }
+  .tl-side { padding: 16px 20px; }
   .tl-side::after { display: none; }
   .tl-who { display: block; }
 }
@@ -1329,3 +1333,42 @@ em, i, cite, dfn, address, var, blockquote { font-style: normal; }
 .display, .h2, .closing-title, .ledger-title, .h3, h3, h4, .big, .book-line, .student-sub, .mission { letter-spacing: -0.015em; }
 .display { letter-spacing: -0.025em; }
 @media (max-width: 599px) { .js .site-nav .nav-cta a.button { color: var(--white); font: 600 16px/16px var(--font-text); min-height: 48px; } .js .site-nav .nav-cta a.button:hover { background: var(--ink-navy); } }
+
+/* ===== Version 7: faculty sizing ===== */
+/* What it costs: two short cards, numbers sized to fit one screen, no oversized art */
+.costs { padding-block: var(--section) 0; }
+.costs .compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-24); margin-top: var(--s-32); align-items: stretch; }
+.costs .compare-panel { padding: 28px; border-radius: 16px; display: flex; flex-direction: column; gap: 0; }
+.costs .compare-art { display: none; }
+.costs .compare-tag { margin: 0 0 var(--s-16); font: 600 14px/20px var(--font-text); color: var(--slate); }
+.costs .big { margin: 0; font: 600 56px/60px var(--font-display); letter-spacing: -0.02em; }
+.costs .big-pre { display: inline; font: inherit; margin-right: 0.25em; font-size: 0.5em; vertical-align: 0.6em; color: var(--slate); }
+.costs .big-label { margin: 6px 0 0; font: 400 17px/24px var(--font-text); color: var(--ink-navy); }
+.costs .minis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-16); margin-top: auto; padding-top: var(--s-24); border-top: 1px solid var(--fog); }
+.costs .compare-panel .big-label { margin-bottom: var(--s-24); }
+.costs .minis dt { font: 600 24px/30px var(--font-display); }
+.costs .minis dd { margin: 2px 0 0; font-size: 14px; line-height: 20px; color: var(--slate); }
+@media (max-width: 767px) {
+  .costs .compare { grid-template-columns: 1fr; gap: var(--s-16); }
+  .costs .compare-panel { padding: 20px; }
+  .costs .big { font-size: 44px; line-height: 48px; }
+  .costs .minis dt { font-size: 20px; line-height: 26px; }
+}
+
+/* Sample: heading on the left like every other section, card on the right, tops aligned */
+.sample { padding-block: var(--section); }
+.sample .grid { align-items: start; }
+.sample-copy { grid-column: 1 / 5; grid-row: 1; }
+.sample-card { grid-column: 5 / 13; grid-row: 1; border-radius: 16px; }
+@media (max-width: 1023px) { .sample-copy, .sample-card { grid-column: 1 / -1; } .sample-copy { margin-bottom: var(--s-24); } .sample-card { grid-row: 2; } }
+
+/* How it works inline on faculty: steps share one height and one inner layout */
+.how-inline-steps h3 { font-size: 22px; line-height: 28px; }
+.how-inline-steps p { font-size: 16px; line-height: 24px; }
+.how-inline-steps li { padding: 28px; }
+.how-inline-steps .hi-num { width: 40px; height: 40px; font-size: 18px; }
+.costs .big-pre { vertical-align: baseline; font-size: 0.4em; }
+.costs .minis { margin-top: 0; }
+.tl-head { margin-bottom: var(--s-40, 40px); }
+/* Phones: the hero illustration takes a full screen on its own, so the words and button come first and the art stays on larger screens */
+@media (max-width: 599px) { .student-hero-panel { display: none; } .costs .compare-panel .big-label { margin-bottom: var(--s-16); } .costs .minis { padding-top: var(--s-16); } }
