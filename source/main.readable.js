@@ -162,6 +162,56 @@ var CAL_LINK = '';
   window.addEventListener('resize', fitLine);
 
   // Header picks up a shadow once the page moves
+  // Two sided: remember which side the visitor picked, so the header button follows them
+  var setSide = function (side) { try { localStorage.setItem('rr-side', side); } catch (e) {} };
+  $$('[data-side]').forEach(function (el) {
+    if (el.tagName !== 'A') return;
+    el.addEventListener('click', function () {
+      var v = el.getAttribute('data-side');
+      setSide(v === 'student' ? 'students' : v === 'lab' ? 'faculty' : v);
+    });
+  });
+
+  // how.html: one side at a time. Opens on the side in the link, then the side the visitor picked, then students
+  var tabs = $$('.side-tab');
+  if (tabs.length) {
+    var showSide = function (side, focus) {
+      tabs.forEach(function (t) {
+        var on = t.getAttribute('data-side') === side;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        if (on && focus) t.focus();
+        $('#' + t.getAttribute('aria-controls')).hidden = !on;
+      });
+      $$('#side-' + side + ' .scene').forEach(function (sc) { sc.classList.remove('is-in'); void sc.offsetWidth; sc.classList.add('is-in'); });
+    };
+    var start = location.hash === '#lab' ? 'lab' : location.hash === '#student' ? 'student' : null;
+    if (!start) { var saved = null; try { saved = localStorage.getItem('rr-side'); } catch (e) {} start = saved === 'faculty' || saved === 'departments' ? 'lab' : 'student'; }
+    showSide(start);
+    window.addEventListener('hashchange', function () { if (location.hash === '#lab' || location.hash === '#student') showSide(location.hash.slice(1)); });
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { var v = t.getAttribute('data-side'); showSide(v); setSide(v === 'lab' ? 'faculty' : 'students'); history.replaceState(null, '', '#' + v); });
+      t.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        var n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        n.click(); n.focus();
+      });
+    });
+    $$('.side-flip').forEach(function (a) {
+      a.addEventListener('click', function (e) { e.preventDefault(); var v = a.getAttribute('data-side'); showSide(v, true); setSide(v === 'lab' ? 'faculty' : 'students'); history.replaceState(null, '', '#' + v); window.scrollTo({ top: $('.side-switch').getBoundingClientRect().top + window.scrollY - 120, behavior: 'smooth' }); });
+    });
+  }
+
+  // Scenes play once as they arrive
+  var scenesIn = $$('.scene, .side-hero');
+  if (scenesIn.length && 'IntersectionObserver' in window) {
+    var so = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); so.unobserve(e.target); } });
+    }, { threshold: 0.35 });
+    scenesIn.forEach(function (el) { so.observe(el); });
+  } else { scenesIn.forEach(function (el) { el.classList.add('is-in'); }); }
+
   var siteHeader = $('.site-header');
   if (siteHeader) {
     var lift = function () { siteHeader.classList.toggle('is-scrolled', window.scrollY > 8); };

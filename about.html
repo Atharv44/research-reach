@@ -20,11 +20,11 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="assets/fonts/switzer-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/supreme-variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=1113v7b">
+<link rel="stylesheet" href="styles.css?v=1118v8">
 <script>var d=document.documentElement;d.classList.add('js');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('motion');</script>
-<script src="assets/gsap.min.js?v=1113v7b" defer></script>
-<script src="assets/ScrollTrigger.min.js?v=1113v7b" defer></script>
-<script src="main.js?v=1113v7b" defer></script>
+<script src="assets/gsap.min.js?v=1118v8" defer></script>
+<script src="assets/ScrollTrigger.min.js?v=1118v8" defer></script>
+<script src="main.js?v=1118v8" defer></script>
 </head>
 <body data-audience="about">
 <a class="visually-hidden skip" href="#main">Skip to content</a>
@@ -56,6 +56,8 @@
     </nav>
     <a class="button header-cta" data-cta="find-student" data-link="lab-outlook" href="https://outlook.office.com/mail/deeplink/compose?to=patemish%40iu.edu&amp;subject=Bringing%20my%20lab%20into%20Research%20Reach&amp;body=Hi%2C%0A%0AI%27d%20like%20to%20bring%20my%20lab%20into%20Research%20Reach.%0A%0AName%3A%0ALab%20or%20PI%3A%0ADepartment%3A%0AWhat%20I%20look%20for%20in%20a%20student%3A%0AA%20few%20times%20that%20work%20to%20talk%3A%0A" target="_blank" rel="noopener">Find a student who fits</a>
   </div>
+  <template id="rr-ctas"><span data-side="students"><a class="button header-cta" data-cta="find-lab" data-link="student" href="https://forms.gle/aK2CJZSYnAAkVHnM9" target="_blank" rel="noopener">Find me a lab</a></span><span data-side="faculty"><a class="button header-cta" data-cta="find-student" data-link="lab-outlook" href="https://outlook.office.com/mail/deeplink/compose?to=patemish%40iu.edu&amp;subject=Bringing%20my%20lab%20into%20Research%20Reach&amp;body=Hi%2C%0A%0AI%27d%20like%20to%20bring%20my%20lab%20into%20Research%20Reach.%0A%0AName%3A%0ALab%20or%20PI%3A%0ADepartment%3A%0AWhat%20I%20look%20for%20in%20a%20student%3A%0AA%20few%20times%20that%20work%20to%20talk%3A%0A" target="_blank" rel="noopener">Find a student who fits</a></span><span data-side="departments"><a class="button header-cta" data-cta="find-department" data-link="dept-outlook" href="https://outlook.office.com/mail/deeplink/compose?to=patemish%40iu.edu&amp;subject=Bringing%20Research%20Reach%20to%20my%20department&amp;body=Hi%2C%0A%0AI%27d%20like%20to%20talk%20about%20bringing%20Research%20Reach%20to%20my%20department.%0A%0AName%3A%0ARole%3A%0ADepartment%3A%0AA%20few%20times%20that%20work%20to%20talk%3A%0A" target="_blank" rel="noopener">Talk to our team</a></span></template>
+  <script>(function(){var k='rr-side',s=null,p='about';try{s=localStorage.getItem(k)}catch(e){}if(!s&&/^(students|faculty|departments)$/.test(p)){s=p;try{localStorage.setItem(k,s)}catch(e){}}if(!s)return;var t=document.getElementById('rr-ctas');if(!t)return;var v=t.content.querySelector('[data-side="'+s+'"] a');if(!v)return;var h=document.querySelector('.site-header .header-cta');if(h)h.replaceWith(v.cloneNode(true));var n=document.querySelector('.nav-cta a');if(n){var c=v.cloneNode(true);c.className='button';n.replaceWith(c)}})();</script>
 </header>
 <main id="main" class="about">
 
