@@ -1547,3 +1547,23 @@ em, i, cite, dfn, address, var, blockquote { font-style: normal; }
 .ledger .ledger-title::before { display: none; }
 .ledger { padding-block: var(--s-64); }
 @media (max-width: 767px) { .ledger .ledger-title { font-size: 26px; line-height: 32px; } .ledger { padding-block: var(--s-48); } }
+
+/* Terms: three parts, each agreement under its own heading */
+.agreement + .agreement { margin-top: var(--section); padding-top: var(--s-48); border-top: 2px solid var(--ink-navy); }
+.agreement-title { margin: 0 0 var(--s-8); font: 600 30px/38px var(--font-display); letter-spacing: -0.01em; color: var(--ink-navy); scroll-margin-top: 112px; }
+.agreement-sub { margin: 0 0 var(--s-24); font: 500 15px/22px var(--font-text); color: var(--reach-blue); }
+.agreement > p { max-width: 38em; color: var(--slate); }
+.agreement .term:first-of-type { margin-top: var(--s-32); }
+.term h3 { display: flex; gap: var(--s-16); align-items: baseline; margin: 0; font: 600 22px/30px var(--font-display); color: var(--ink-navy); }
+.term-list { max-width: 38em; margin: var(--s-16) 0 0; padding-left: var(--s-24); color: var(--slate); display: grid; gap: 8px; }
+.agreement-accept { margin-top: var(--s-32); padding: var(--s-16) var(--s-24); border-radius: 12px; background: var(--pale-sky); color: var(--ink-navy) !important; font-size: 15px; line-height: 24px; }
+.toc > ol { border-bottom: 0; }
+.toc-group + .toc-group { margin-top: var(--s-24); }
+.toc-label { margin: 0 0 8px; font: 600 13px/18px var(--font-text); color: var(--reach-blue); }
+.toc-group ol { border-bottom: 1px solid var(--fog); }
+.toc { max-height: calc(100vh - 140px); overflow-y: auto; }
+
+/* The screening step matches the other scenes: light ground, blue frame to mark it as our step */
+.scene.is-ours .scene-pic { background: var(--white); box-shadow: inset 0 0 0 2px var(--panel-blue); }
+.scene.is-ours .scene-pic .svg-tag { fill: var(--reach-blue); }
+.scene.is-ours .scene-num { background: var(--reach-blue); color: var(--white); }
